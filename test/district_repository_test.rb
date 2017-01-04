@@ -38,46 +38,39 @@ class DistrictRepositoryTest < Minitest::Test
   end
 
   def test_can_find_district_by_name
-    skip
-    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result = dr.find_by_name("ACADEMY 20")
     assert_equal "ACADEMY 20", result.name
     assert_equal District, result.class
   end
 
   def test_can_find_district_by_name_case_insensitive
-    skip
-    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result = dr.find_by_name("acaDEmy 20")
     assert_equal "ACADEMY 20", result.name
     assert_equal District, result.class
   end
 
   def test_find_by_all_returns_nil_for_no_search_results
-    skip
-    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result = dr.find_by_name("Turing School")
-    assert_equal nil, result
+    assert_nil result
   end
 
   def test_can_return_all_matching_from_find_all_matching_search
-    skip
-    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result_1 = []
     expected_1 = dr.find_all_matching("Tur")
-    result_2_names = ["ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J"]
     expected_2 = dr.find_all_matching("ADA")
     assert_equal result_1, expected_1
-    assert_equal result_2_names.sort, expected_2.sort
     assert_equal 2, expected_2.count
+    assert expected_2.all? { |district| district.class == District }
   end
 
   def test_find_all_returns_matching_from_case_insensitive_search
-    skip
-    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
-    result_names = ["ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J"]
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     expected = dr.find_all_matching("ada")
-    assert_equal result_names.sort, expected.sort
     assert_equal 2, expected.count
+    assert expected.all? { |district| district.class == District }
   end
 end
