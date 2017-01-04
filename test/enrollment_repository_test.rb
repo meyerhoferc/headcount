@@ -8,4 +8,13 @@ class EnrollmentRepositoryTest < Minitest::Test
   def setup
     @er = EnrollmentRepository.new
   end
+
+  def test_it_is_an_enrollment_repository
+    assert er
+    assert_equal EnrollmentRepository, er.class
+  end
+
+  def test_
+
+  end
 end
