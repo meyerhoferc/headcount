@@ -18,7 +18,7 @@ class DistrictRepository
     contents.each do |row|
       name = row[:location].upcase
       district = District.new
-      @districts[name] = district
+      @districts[name] = district unless @districts.has_key?(name)
       district.identifier[:name] = name
     end
   end
