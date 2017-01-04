@@ -25,9 +25,15 @@ class DistrictRepositoryTest < Minitest::Test
   end
 
   def test_sample_data_names_are_in_districts_keys
-    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
-    assert_equal 6, dr.districts.count
-    names = ["ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300", "BENNETT 29J", "YUMA SCHOOL DISTRICT 1"]
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
+    assert_equal 27, dr.districts.count
+    names = ["ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300",
+      "BENNETT 29J", "CROWLEY COUNTY RE-1-J", "CUSTER COUNTY SCHOOL DISTRICT C-1",
+      "DE BEQUE 49JT", "DEER TRAIL 26J", "DEL NORTE C-7", "DELTA COUNTY 50(J)", "DENVER COUNTY 1",
+      "DOLORES COUNTY RE NO.2", "DOLORES RE-4A", "DOUGLAS COUNTY RE 1",
+      "DURANGO 9-R", "EADS RE-1", "EAGLE COUNTY RE 50", "EAST GRAND 2",
+      "EAST OTERO R-1", "EAST YUMA COUNTY RJ-2", "EATON RE-2", "EDISON 54 JT",
+      "ELBERT 200", "ELIZABETH C-1", "ELLICOTT 22", "YUMA SCHOOL DISTRICT 1"]
     assert_equal names.sort, dr.districts.keys.sort
   end
 
