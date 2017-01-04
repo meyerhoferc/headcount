@@ -9,29 +9,25 @@ class EnrollmentTest < Minitest::Test
   end
 
   def test_it_is_an_enrollment_class
-    assert er
+    assert enrollment
     assert_equal Enrollment, enrollment.class
   end
 
   def test_it_has_identifier
-    skip
     assert enrollment.identifier
   end
 
   def test_it_stores_the_name_of_a_district
-    skip
     assert_equal "ACADEMY 20", enrollment.identifier[:name]
   end
 
   def test_can_return_kindergarten_participation_by_year
-    skip
     expected = { 2001 => 0.312, 2003 => 0.452}
     result = enrollment.kindergarten_participation_by_year
     assert_equal expected, result
   end
 
   def test_can_return_kindergarten_participation_for_a_year
-    skip
     expected_1 = 0.312
     expected_2 = 0.452
     result_1 = enrollment.kindergarten_participation_in_year(2001)
