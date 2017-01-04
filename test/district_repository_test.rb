@@ -47,4 +47,32 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal District, result.class
   end
 
+  def test_find_by_all_returns_nil_for_no_search_results
+    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    result = dr.find_by_name("Turing School")
+    assert_equal nil, result
+  end
+
+  def test_can_return_all_matching_from_find_all_matching_search
+    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    result_1 = []
+    expected_1 = dr.find_all_matching("Tur")
+    result_2_names = ["ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J"]
+    expected_2 = dr.find_all_matching("ADA")
+    assert_equal result_1, expected_1
+    assert_equal result_2_names.sort, expected_2.keys.sort
+    assert_equal 2, expected_2.count
+  end
+
+  def test_find_all_returns_matching_from_case_insensitive_search
+    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    result_names = ["ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J"]
+    expected = dr.find_all_matching("ada")
+    assert_equal result_names.sort, expected.keys.sort
+    assert_equal 2, expected.count
+  end
+
 end
