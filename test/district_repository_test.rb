@@ -2,7 +2,6 @@ require_relative 'test_helper'
 require './lib/district'
 require './lib/district_repository'
 require 'csv'
-# require 'Kindergarten_sample_data.csv'
 
 class DistrictRepositoryTest < Minitest::Test
   attr_reader :dr, :sample_data
@@ -30,6 +29,22 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal 6, dr.districts.count
     names = ["ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300", "BENNETT 29J", "YUMA SCHOOL DISTRICT 1"]
     assert_equal names.sort, dr.districts.keys.sort
+  end
+
+  def test_can_find_district_by_name
+    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    result = dr.find_by_name("ACADEMY 20")
+    assert_equal "ACADEMY 20", result.name
+    assert_equal District, result.class
+  end
+
+  def test_can_find_district_by_name_case_insensitive
+    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
+    result = dr.find_by_name("acaDEmy 20")
+    assert_equal "ACADEMY 20", result.name
+    assert_equal District, result.class
   end
 
 end
