@@ -22,4 +22,15 @@ class DistrictRepository
       district.identifier[:name] = name
     end
   end
+
+  def find_by_name(name)
+    @districts[name]
+  end
+
+  def find_all_matching(sub_name)
+    @districts.each_key do |key|
+      binding.pry
+      key.include?(sub_name)
+    end
+  end
 end
