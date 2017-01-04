@@ -11,6 +11,7 @@ class DistrictTest < Minitest::Test
     assert district
     assert_equal District, district.class
   end
+
   def test_it_has_identifier
     assert district.identifier
   end
@@ -20,6 +21,7 @@ class DistrictTest < Minitest::Test
     assert district.name
     assert_equal "ACADEMY 20", district.name
   end
+
   def test_name_is_an_upcase_string
     district.identifier[:name] = "ACADEMY 20"
     name_1 = "ACADEMY 20"

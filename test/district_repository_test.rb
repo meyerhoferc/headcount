@@ -62,7 +62,7 @@ class DistrictRepositoryTest < Minitest::Test
     result_2_names = ["ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J"]
     expected_2 = dr.find_all_matching("ADA")
     assert_equal result_1, expected_1
-    assert_equal result_2_names.sort, expected_2.keys.sort
+    assert_equal result_2_names.sort, expected_2.sort
     assert_equal 2, expected_2.count
   end
 
@@ -71,8 +71,7 @@ class DistrictRepositoryTest < Minitest::Test
     dr.load_data({:enrollment => {:kindergarten => './test/Kindergarten_sample_data.csv'}})
     result_names = ["ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J"]
     expected = dr.find_all_matching("ada")
-    assert_equal result_names.sort, expected.keys.sort
+    assert_equal result_names.sort, expected.sort
     assert_equal 2, expected.count
   end
-
 end
