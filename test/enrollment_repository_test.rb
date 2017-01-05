@@ -31,6 +31,17 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal expected_5, er.clean_occupancy(given_5)
   end
 
+  def test_clean_year_returns_sample_data_correctly
+    sample_1, sample_2, sample_3, sample_4, sample_5 = ["200", "2007", "02010", "20120", "2017"]
+    result = ["2000", "2007", "2010", "2012", "2017"]
+    expected_1, expected_2, expected_3, expected_4, expected_5 = result
+    assert_equal expected_1, er.clean_year(sample_1)
+    assert_equal expected_2, er.clean_year(sample_2)
+    assert_equal expected_3, er.clean_year(sample_3)
+    assert_equal expected_4, er.clean_year(sample_4)
+    assert_equal expected_5, er.clean_year(sample_5)
+  end
+
   def test_sample_data_names_are_in_enrollments_keys
     skip 
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})

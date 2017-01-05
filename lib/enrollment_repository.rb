@@ -41,5 +41,16 @@ class EnrollmentRepository
   end
 
   def clean_year(year)
+    year = year.chars
+    return year.join.ljust(4, "0") if year.count < 4
+    if year[0] == "0"
+      year.shift
+      return year.join.ljust(4, "0")
+    end 
+    if year[-1] == "0"
+      year.pop
+      return year.join.ljust(4, "0")
+    end
+    year.join
   end
 end
