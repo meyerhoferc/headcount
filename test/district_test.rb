@@ -29,4 +29,20 @@ class DistrictTest < Minitest::Test
     assert_equal name_1, district.name
     refute_equal name_2, district.name
   end
+
+  def test_distrist_knows_what_repo_it_is_in
+    skip
+  end
+
+  def test_district_can_find_enrollment_with_same_name
+    skip
+    enrollment = district.enrollment
+    assert_equal district.name, enrollment.identifier[:name]
+  end
+
+  def test_district_can_get_enrollment_occupancy_for_year
+    skip
+    enrollment = district.enrollment
+    assert_equal VALUE, district.enrollment.kindergarten_participation_in_year(YEAR)
+  end
 end
