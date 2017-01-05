@@ -4,7 +4,7 @@ require './lib/district'
 class DistrictTest < Minitest::Test
   attr_reader :district
   def setup
-    @district = District.new
+    @district = District.new({:name => "ACADEMY 20"})
   end
 
   def test_it_is_district_class
