@@ -9,8 +9,8 @@ class DistrictRepository
   end
 
   def load_data(data)
-    er = ER.new #maybe an ivar, in attr_reader 
-    er.load_data(data)
+    # er = ER.new #maybe an ivar, in attr_reader
+    # er.load_data(data)
     file_name = data[:enrollment][:kindergarten]
     contents = CSV.open file_name,
     headers: true, header_converters: :symbol
