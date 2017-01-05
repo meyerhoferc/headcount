@@ -43,7 +43,6 @@ class EnrollmentRepositoryTest < Minitest::Test
   end
 
   def test_sample_data_names_are_in_enrollments_keys
-    skip 
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     assert_equal 27, er.enrollments.count
     names = ["ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300",
@@ -57,23 +56,20 @@ class EnrollmentRepositoryTest < Minitest::Test
   end
 
   def test_can_find_enrollment_by_name
-    skip
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result = er.find_by_name("ACADEMY 20")
-    assert_equal "ACADEMY 20", result.name
+    assert_equal "ACADEMY 20", result.identifier[:name]
     assert_equal Enrollment, result.class
   end
 
   def test_can_find_enrollment_by_name_case_insensitive
-    skip
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result = er.find_by_name("acaDEmy 20")
-    assert_equal "ACADEMY 20", result.name
+    assert_equal "ACADEMY 20", result.identifier[:name]
     assert_equal Enrollment, result.class
   end
 
   def test_find_by_all_returns_nil_for_no_search_results
-    skip
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result = er.find_by_name("Turing School")
     assert_nil result

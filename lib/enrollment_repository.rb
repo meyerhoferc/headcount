@@ -20,7 +20,7 @@ class EnrollmentRepository
       name = row[:location].upcase
       year, occupancy = kindergarten_participation_yearly(row)
       if @enrollments.has_key?(name)
-        @enrollments[name][:kindergarten_participation][year] = occupancy
+        @enrollments[name].identifier[:kindergarten_participation][year] = occupancy
       else
         enrollment = Enrollment.new({ :name => name,
           :kindergarten_participation => { year => occupancy }})
@@ -52,5 +52,10 @@ class EnrollmentRepository
       return year.join.ljust(4, "0")
     end
     year.join
+  end
+
+  def find_by_name(name)
+    name = name.upcase
+    @enrollments[name]
   end
 end
