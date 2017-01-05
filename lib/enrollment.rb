@@ -1,3 +1,4 @@
+require 'pry'
 class Enrollment
   attr_reader :identifier
   def initialize(identifier)
@@ -9,6 +10,12 @@ class Enrollment
   end
 
   def kindergarten_participation_in_year(year)
-    @identifier[:kindergarten_participation][year]
+    participation = @identifier[:kindergarten_participation][year]
+    # binding.pry
+    participation.to_f
+  end
+
+  def name
+    @identifier[:name]
   end
 end

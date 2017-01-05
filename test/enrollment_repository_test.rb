@@ -74,4 +74,11 @@ class EnrollmentRepositoryTest < Minitest::Test
     result = er.find_by_name("Turing School")
     assert_nil result
   end
+
+  def test_can_find_enrollment_for_district_in_year
+    er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
+    enrollment = er.find_by_name("ADAMS-ARAPAHOE 28J")
+    assert_equal 0.47359, enrollment.kindergarten_participation_in_year(2007)
+    # assert_equal 0.20176, enrollment.kindergarten_participation_in_year(2005)
+  end
 end

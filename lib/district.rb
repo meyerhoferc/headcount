@@ -1,7 +1,8 @@
 class District
   attr_reader :identifier
-  def initialize
-    @identifier = Hash.new
+
+  def initialize(identifier)
+    @identifier = identifier
   end
 
   def name

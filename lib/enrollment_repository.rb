@@ -1,5 +1,5 @@
 require 'csv'
-require './lib/enrollment'
+require_relative 'enrollment'
 require 'pry'
 
 class EnrollmentRepository
@@ -46,7 +46,7 @@ class EnrollmentRepository
     if year[0] == "0"
       year.shift
       return year.join.ljust(4, "0")
-    end 
+    end
     if year[-1] == "0"
       year.pop
       return year.join.ljust(4, "0")

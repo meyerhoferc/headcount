@@ -1,4 +1,4 @@
-require './lib/district'
+require_relative 'district'
 require 'csv'
 require 'pry'
 class DistrictRepository
@@ -17,9 +17,8 @@ class DistrictRepository
   def district_maker(contents)
     contents.each do |row|
       name = row[:location].upcase
-      district = District.new
+      district = District.new({:name => name})
       @districts[name] = district unless @districts.has_key?(name)
-      district.identifier[:name] = name
     end
   end
 
