@@ -32,7 +32,7 @@ class EnrollmentRepositoryTest < Minitest::Test
   end
 
   def test_sample_data_names_are_in_enrollments_keys
-    skip
+    skip 
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     assert_equal 27, er.enrollments.count
     names = ["ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300",

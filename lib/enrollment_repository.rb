@@ -18,17 +18,19 @@ class EnrollmentRepository
   def enrollment_maker(contents)
     contents.each do |row|
       name = row[:location].upcase
-      year, occupancy = kindergarten_participation_yearly(row) # => { 2001 => .343}
-      # still needs to check for duplicates
-      enrollment = Enrollment.new({ :name => name, :kindergarten_participation => { year => occupancy }})
-      @enrollments[name] = enrollment unless @districts.has_key?(name)
+      year, occupancy = kindergarten_participation_yearly(row)
+      if @enrollments.has_key?(name)
+        @enrollments[name][:kindergarten_participation][year] = occupancy
+      else
+        enrollment = Enrollment.new({ :name => name,
+          :kindergarten_participation => { year => occupancy }})
+        @enrollments[name] = enrollment
+      end
     end
   end
 
-  def kindergarten_participation(row)
-    occupancy = clean_occupancy(row[:data])
-    year = clean_year(row[:timeframe])
-    [year, occupancy]
+  def kindergarten_participation_yearly(row)
+    [clean_year(row[:timeframe]), clean_occupancy(row[:data])]
   end
 
   def clean_occupancy(occupancy)
