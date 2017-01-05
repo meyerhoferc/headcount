@@ -21,25 +21,17 @@ class EnrollmentRepositoryTest < Minitest::Test
   end
 
   def test_clean_occupancy_returns_correct_possible_data
-    given_1, given_2, given_3, given_4, given_5 = ["0", "1", "0.12345", "N/A", "0.123"]
+    given =  ["0", "1", "0.12345", "N/A", "0.123"]
     result = ["0.00000", "1.00000", "0.12345", "N/A", "0.12300"]
-    expected_1, expected_2, expected_3, expected_4, expected_5 = result
-    assert_equal expected_1, er.clean_occupancy(given_1)
-    assert_equal expected_2, er.clean_occupancy(given_2)
-    assert_equal expected_3, er.clean_occupancy(given_3)
-    assert_equal expected_4, er.clean_occupancy(given_4)
-    assert_equal expected_5, er.clean_occupancy(given_5)
+    matching = given.zip(result)
+    matching.each { |pair| assert_equal pair[1], er.clean_occupancy(pair[0]) }
   end
 
   def test_clean_year_returns_sample_data_correctly
-    sample_1, sample_2, sample_3, sample_4, sample_5 = ["200", "2007", "02010", "20120", "2017"]
+    given = ["200", "2007", "02010", "20120", "2017"]
     result = ["2000", "2007", "2010", "2012", "2017"]
-    expected_1, expected_2, expected_3, expected_4, expected_5 = result
-    assert_equal expected_1, er.clean_year(sample_1)
-    assert_equal expected_2, er.clean_year(sample_2)
-    assert_equal expected_3, er.clean_year(sample_3)
-    assert_equal expected_4, er.clean_year(sample_4)
-    assert_equal expected_5, er.clean_year(sample_5)
+    matchers = given.zip(result)
+    matchers.each { |pair| assert_equal pair[1], er.clean_year(pair[0]) }
   end
 
   def test_sample_data_names_are_in_enrollments_keys
