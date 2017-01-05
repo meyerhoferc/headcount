@@ -73,4 +73,12 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal 2, expected.count
     assert expected.all? { |district| district.class == District }
   end
+
+  def test_district_repo_can_grab_enrollment_data
+    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
+    enrollment = dr.er.find_by_name("ACADEMY 20")
+    assert_equal Enrollment, enrollment.class
+    assert_equal "ACADEMY 20", enrollment.identifier[:name]
+  end
 end

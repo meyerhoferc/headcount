@@ -1,4 +1,5 @@
 require_relative 'district'
+require_relative 'enrollment_repository'
 require 'csv'
 require 'pry'
 class DistrictRepository
@@ -8,16 +9,20 @@ class DistrictRepository
   end
 
   def load_data(data)
+    # er = ER.new #maybe an ivar, in attr_reader
+    # er.load_data(data)
     file_name = data[:enrollment][:kindergarten]
     contents = CSV.open file_name,
     headers: true, header_converters: :symbol
+
     district_maker(contents)
   end
 
   def district_maker(contents)
     contents.each do |row|
       name = row[:location].upcase
-      district = District.new({:name => name})
+      # district = District.new({:name => name, :repo => self})
+      district = District.new({ :name => name })
       @districts[name] = district unless @districts.has_key?(name)
     end
   end
