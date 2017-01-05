@@ -30,7 +30,7 @@ class EnrollmentRepository
   end
 
   def kindergarten_participation_yearly(row)
-    [clean_year(row[:timeframe]), clean_occupancy(row[:data])]
+    [clean_year(row[:timeframe]).to_i, clean_occupancy(row[:data]).to_f]
   end
 
   def clean_occupancy(occupancy)
