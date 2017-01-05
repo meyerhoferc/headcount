@@ -26,9 +26,7 @@ class EnrollmentRepository
   end
 
   def kindergarten_participation(row)
-    occupancy = clean_occupancy(row[:data])
-    year = clean_year(row[:timeframe])
-    [year, occupancy]
+    [clean_year(row[:timeframe]), clean_occupancy(row[:data])]
   end
 
   def clean_occupancy(occupancy)
