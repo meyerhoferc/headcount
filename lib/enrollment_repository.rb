@@ -32,6 +32,10 @@ class EnrollmentRepository
   end
 
   def clean_occupancy(occupancy)
+    return occupancy if occupancy.upcase == "N/A"
+    return (occupancy + '.').ljust(7, "0") if occupancy == "0" || occupancy == "1"
+    return occupancy.ljust(7, "0") if occupancy.chars.count < 7
+    occupancy
   end
 
   def clean_year(year)
