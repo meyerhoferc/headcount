@@ -1,10 +1,14 @@
 require_relative 'test_helper'
 require './lib/district'
+require './lib/district_repository'
+
 
 class DistrictTest < Minitest::Test
-  attr_reader :district
+  attr_reader :district,
+              :dr
   def setup
-    @district = District.new({:name => "ACADEMY 20"})
+    @dr = DistrictRepository.new
+    @district = District.new({:name => "ACADEMY 20", :repo => @dr})
   end
 
   def test_it_is_district_class
@@ -30,19 +34,20 @@ class DistrictTest < Minitest::Test
     refute_equal name_2, district.name
   end
 
-  def test_distrist_knows_what_repo_it_is_in
-    skip
+  def test_distrist_knows_it_is_in_repository
+    assert_equal DistrictRepository, district.repo.class
   end
 
   def test_district_can_find_enrollment_with_same_name
-    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     enrollment = district.enrollment
+    assert_equal Enrollment, enrollment.class
     assert_equal district.name, enrollment.identifier[:name]
   end
 
   def test_district_can_get_enrollment_occupancy_for_year
-    skip
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     enrollment = district.enrollment
-    assert_equal VALUE, district.enrollment.kindergarten_participation_in_year(YEAR)
+    assert_equal 0.39159, district.enrollment.kindergarten_participation_in_year(2007)
   end
 end
