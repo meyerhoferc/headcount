@@ -26,9 +26,21 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_can_find_average_enrollment_for_district
     skip
-    district_name = 'ACADEMY 20' # ADAMS-ARAPAHOE here
+    district_name = 'ADAMS-ARAPAHOE 28J'
     actual = ha.find_average(district_name)
-    expected = 0.234322432 #not actually
+    expected = 0.47359 #this is actual figure
     assert_equal expected, actual
   end
+
+  def test_kindergarten_participation_rate_variation_against_state_performance
+    skip
+    district_name = 'ADAMS-ARAPAHOE 28J'
+    # expected = 0.47359
+    assert_equal 0.47359, ha.kindergarten_participation_rate_variation('ADAMS-ARAPAHOE', against: 'COLORADO')
+    assert_equal 1.0, @ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ACADEMY 20') #baseline figure
+    assert_equal , ha.kindergarten_participation_rate_variation()
+    assert_equal "#{insert rate variation value}", @ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ADAMS-ARAPAHOE')
+    refute "#{error}" { @ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ARIZONA') }
+    #potentially do another assertion for error values thrown? differing data?
+  end 
 end

@@ -29,9 +29,7 @@ class DistrictRepository
 
   def find_by_name(name)
     @districts[name.upcase]
-  end
-
-  def find_all_matching(sub_name)
+  end   def find_all_matching(sub_name)
     matching_districts = {}
     @districts.each_pair do |key, value|
       matching_districts[key] = value if key.include?(sub_name.upcase)
