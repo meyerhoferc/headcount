@@ -20,6 +20,12 @@ class HeadcountAnalyst
 		enrollment_data.reduce(:+) / enrollment_data.count
 	end
 
+	def compare_averages(district_1_name, district_2_name)
+		district_1_average = find_average(district_1_name)
+		district_2_average = find_average(district_2_name)
+		district_1_average / district_2_average
+	end
+
 	def kindergarten_participation_rate_variation(name, against_comparison)
 		comparison = against_comparison[:against]
 		district1 = dr.er.find_by_name(name)

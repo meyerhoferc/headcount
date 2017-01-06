@@ -24,7 +24,6 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_can_find_average_enrollment_for_district
-    skipgti
     district_name = 'ADAMS-ARAPAHOE 28J'
     actual = ha.find_average(district_name)
     expected = (0.47359 + 0.20176) / 2
@@ -32,26 +31,31 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_can_compare_two_averages
-    skip
     district_name = 'ADAMS-ARAPAHOE 28J'
-    district_name_2 = 'ADAMS-ARAPAHOE 28J'
+    district_name_2 = 'DENVER COUNTY 1' #0.72181
     district_1_average = ha.find_average(district_name)
     district_2_average = ha.find_average(district_name_2)
     expected = district_1_average / district_2_average #work out this value
-    actual = ha.compare_averages(district_1, district_2)
+    actual = ha.compare_averages(district_name, district_name_2)
     assert_equal expected, actual
   end
 
   def test_kindergarten_participation_rate_variation_against_state_performance
     skip
-    # district_name = 'ADAMS-ARAPAHOE 28J'
-    # # expected = 0.47359
-    # assert_equal 0.47359, ha.kindergarten_participation_rate_variation('ADAMS-ARAPAHOE', against: 'COLORADO')
-    # assert_equal 1.0, ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ACADEMY 20') #baseline figure
-    # # assert_equal , ha.kindergarten_participation_rate_variation()
+    district_1_name = 'ADAMS-ARAPAHOE 28J'
+    district_2_name = 'ACADEMY 20'
+    # district_1_average = ha.find_average(district_1_name)
+    # district_2_average = ha.find_average(district_2_name)
+    actual_1 = ha.kindergarten_participation_rate_variation(district_1_name, :against 'COLORADO')
+    actual_2 = ha.kindergarten_participation_rate_variation(district_1_name, :against 'COLORADO')
+    # assert_equal NUM, actual_1
+    assert_equal 0.766, actual_2
+    # assert_equal 0.766, ha.kindergarten_participation_rate_variation('ACADEMY 20', :against 'COLORADO')
+    # assert_equal , ha.kindergarten_participation_rate_variation('ADAMS-ARAPAHOE 28J', :against 'COLORADO')
+    assert_equal 1.0, ha.kindergarten_participation_rate_variation('ACADEMY 20', :against 'ACADEMY 20') #baseline figure
     # assert_equal "#{insert rate variation value}", ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ADAMS-ARAPAHOE')
-    # # assert_raise "#{unknown data}", ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ARIZONA') }
-    # #potentially do another assertion for error values thrown? differing data?
+    # assert_raise "#{unknown data}", ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ARIZONA') }
+    #potentially do another assertion for error values thrown? differing data?
   end 
   def test_kindergarten_participation_rate_variation_trend_year_on_year
     # district_name = 'ADAMS-ARAPAHOE 28J'
