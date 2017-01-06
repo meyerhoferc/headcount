@@ -46,6 +46,7 @@ class DistrictTest < Minitest::Test
   end
 
   def test_district_can_get_enrollment_occupancy_for_year
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     enrollment = district.enrollment
     assert_equal 0.39159, district.enrollment.kindergarten_participation_in_year(2007)
   end
