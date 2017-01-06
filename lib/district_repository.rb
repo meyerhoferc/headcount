@@ -29,7 +29,7 @@ class DistrictRepository
 
   def find_by_name(name)
     @districts[name.upcase]
-  end
+  end 
 
   def find_all_matching(sub_name)
     matching_districts = {}
