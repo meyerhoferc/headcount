@@ -24,7 +24,6 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_can_find_average_enrollment_for_district
-    skip 
     district_name = 'ADAMS-ARAPAHOE 28J'
     actual = ha.find_average(district_name)
     expected = (0.47359 + 0.20176) / 2
@@ -58,7 +57,9 @@ class HeadcountAnalystTest < Minitest::Test
       2008 => 0.717, 2009 => 0.652, 2010 => 0.681, 2011 => 0.727, 2012 =>
       0.688, 2013 => 0.694, 2014 => 0.661 }
     actual = ha.kindergarten_participation_rate_variation_trend('ACADEMY 20', :against => 'COLORADO')
-    assert_equal expected, actual
+    actual.each_pair do |year, value|
+      assert_in_delta expected[year], value, 0.005
+    end
   end
 
   def test_returns_unknown_data_error
