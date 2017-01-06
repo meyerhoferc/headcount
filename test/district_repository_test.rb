@@ -86,4 +86,10 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal Enrollment, enrollment.class
     assert_equal "ACADEMY 20", enrollment.identifier[:name]
   end
+
+  def test_passes_self_to_districts_in_district_maker
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
+    district = dr.find_by_name("ACADEMY 20")
+    assert_equal DistrictRepository, district.repo.class
+  end
 end

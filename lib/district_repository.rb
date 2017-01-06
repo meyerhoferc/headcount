@@ -22,8 +22,7 @@ class DistrictRepository
   def district_maker(contents)
     contents.each do |row|
       name = row[:location].upcase
-      # district = District.new({:name => name, :repo => self})
-      district = District.new({ :name => name })
+      district = District.new({:name => name, :repo => self})
       @districts[name] = district unless @districts.has_key?(name)
     end
   end
