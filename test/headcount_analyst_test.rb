@@ -41,7 +41,6 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_kindergarten_participation_rate_variation_against_state_performance
-    skip
     district_1_name = 'ADAMS-ARAPAHOE 28J'
     district_2_name = 'ACADEMY 20'
     # district_1_average = ha.find_average(district_1_name)
@@ -55,7 +54,6 @@ class HeadcountAnalystTest < Minitest::Test
     assert_equal 1.0, ha.kindergarten_participation_rate_variation('ACADEMY 20', :against => 'ACADEMY 20') #baseline figure
     # assert_equal "#{insert rate variation value}", ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ADAMS-ARAPAHOE')
     # assert_raise "#{unknown data}", ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ARIZONA') }
-    #potentially do another assertion for error values thrown? differing data?
   end
   def test_kindergarten_participation_rate_variation_trend_year_on_year
     # district_name = 'ADAMS-ARAPAHOE 28J'
