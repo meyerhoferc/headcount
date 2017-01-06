@@ -13,16 +13,15 @@ class HeadcountAnalyst
 
 	def find_average(district_name)
 		enrollment = find_enrollment(district_name)
-		# ^^ finding an object inside of DR might need to be a method
 		enrollment_data = enrollment.kindergarten_participation_by_year
 		enrollment_data = enrollment_data.map { |year, value| value }
-		enrollment_data.reduce(:+) / enrollment_data.count
+		(enrollment_data.reduce(:+) / enrollment_data.count).round(5)
 	end
 
 	def compare_averages(district_1_name, district_2_name)
 		district_1_average = find_average(district_1_name)
 		district_2_average = find_average(district_2_name)
-		district_1_average / district_2_average
+		(district_1_average / district_2_average).round(3)
 	end
 
 	def kindergarten_participation_rate_variation(district_name, against_comparison)
