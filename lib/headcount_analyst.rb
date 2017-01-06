@@ -4,7 +4,6 @@ require_relative 'district_repository'
 require_relative 'district'
 require 'pry'
 
-
 class HeadcountAnalyst
 	attr_reader :dr
 	def initialize(dr)
@@ -24,12 +23,24 @@ class HeadcountAnalyst
 		(district_1_average / district_2_average).round(3)
 	end
 
-	def kindergarten_participation_rate_variation(district_name, against_comparison)
-		comparison_district = against_comparison[:against]
-		compare_averages(district_name, comparison_district)
+	def kindergarten_participation_rate_variation(district_name, comparison)
+		compare_averages(district_name, comparison[:against])
 	end
 
 	def find_enrollment(district_name)
 		dr.er.find_by_name(district_name)
+	end
+
+	def kindergarten_participation_rate_variation_trend(district_name, comparison)
+		enrollment_1 = find_enrollment(district_name)
+		enrollment_2 = find_enrollment(comparison[:against])
+		enrollment_data_1 = enrollment_1.kindergarten_participation_by_year
+		enrollment_data_2 = enrollment_2.kindergarten_participation_by_year
+		result = {}
+		enrollment_data_1.each_pair do |year, value|
+			ratio = (value / enrollment_data_2[year]).round(3)
+			result[year] = ratio
+		end
+		result.sort.to_h
 	end
 end
