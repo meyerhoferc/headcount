@@ -46,20 +46,20 @@ class HeadcountAnalystTest < Minitest::Test
     district_2_name = 'ACADEMY 20'
     # district_1_average = ha.find_average(district_1_name)
     # district_2_average = ha.find_average(district_2_name)
-    actual_1 = ha.kindergarten_participation_rate_variation(district_1_name, :against 'COLORADO')
-    actual_2 = ha.kindergarten_participation_rate_variation(district_1_name, :against 'COLORADO')
+    actual_1 = ha.kindergarten_participation_rate_variation(district_1_name, :against => 'COLORADO')
+    actual_2 = ha.kindergarten_participation_rate_variation(district_1_name, :against => 'COLORADO')
     # assert_equal NUM, actual_1
     assert_equal 0.766, actual_2
     # assert_equal 0.766, ha.kindergarten_participation_rate_variation('ACADEMY 20', :against 'COLORADO')
     # assert_equal , ha.kindergarten_participation_rate_variation('ADAMS-ARAPAHOE 28J', :against 'COLORADO')
-    assert_equal 1.0, ha.kindergarten_participation_rate_variation('ACADEMY 20', :against 'ACADEMY 20') #baseline figure
+    assert_equal 1.0, ha.kindergarten_participation_rate_variation('ACADEMY 20', :against => 'ACADEMY 20') #baseline figure
     # assert_equal "#{insert rate variation value}", ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ADAMS-ARAPAHOE')
     # assert_raise "#{unknown data}", ha.kindergarten_participation_rate_variation('ACADEMY 20', against: 'ARIZONA') }
     #potentially do another assertion for error values thrown? differing data?
-  end 
+  end
   def test_kindergarten_participation_rate_variation_trend_year_on_year
     # district_name = 'ADAMS-ARAPAHOE 28J'
     # #returns hash: rate variation trend
   end
-  
+
 end
