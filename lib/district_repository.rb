@@ -3,14 +3,15 @@ require_relative 'enrollment_repository'
 require 'csv'
 require 'pry'
 class DistrictRepository
-  attr_reader :districts
+  attr_reader :districts,
+              :er
   def initialize
     @districts = Hash.new
   end
 
   def load_data(data)
-    # er = ER.new #maybe an ivar, in attr_reader
-    # er.load_data(data)
+    @er = EnrollmentRepository.new
+    @er.load_data(data)
     file_name = data[:enrollment][:kindergarten]
     contents = CSV.open file_name,
     headers: true, header_converters: :symbol
