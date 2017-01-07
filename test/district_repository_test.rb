@@ -26,10 +26,10 @@ class DistrictRepositoryTest < Minitest::Test
 
   def test_sample_data_names_are_in_districts_keys
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
-    assert_equal 8, dr.districts.count
-    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "BIG SANDY 100J",
-      "BRIGGSDALE RE-10", "DE BEQUE 49JT", "WELD COUNTY RE-1",
-      "WELD COUNTY S/D RE-8"]
+    assert_equal 9, dr.districts.count
+    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J",
+      "BIG SANDY 100J", "BRIGGSDALE RE-10", "DE BEQUE 49JT",
+      "WELD COUNTY RE-1", "WELD COUNTY S/D RE-8"]
     assert_equal names.sort, dr.districts.keys.sort
   end
 
@@ -57,14 +57,14 @@ class DistrictRepositoryTest < Minitest::Test
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     assert_equal [], dr.find_all_matching("Tur")
     expected_2 = dr.find_all_matching("A")
-    assert_equal 2, expected_2.count
+    assert_equal 3, expected_2.count
     assert expected_2.all? { |district| district.class == District }
   end
 
   def test_find_all_returns_matching_from_case_insensitive_search
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     expected = dr.find_all_matching("a")
-    assert_equal 2, expected.count
+    assert_equal 3, expected.count
     assert expected.all? { |district| district.class == District }
   end
 

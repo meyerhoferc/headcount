@@ -39,10 +39,10 @@ class EnrollmentRepositoryTest < Minitest::Test
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
       :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
 
-    assert_equal 8, er.enrollments.count
-    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "BIG SANDY 100J",
-    "BRIGGSDALE RE-10", "DE BEQUE 49JT", "WELD COUNTY RE-1",
-    "WELD COUNTY S/D RE-8"]
+    assert_equal 9, er.enrollments.count
+    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J",
+      "BIG SANDY 100J", "BRIGGSDALE RE-10", "DE BEQUE 49JT",
+      "WELD COUNTY RE-1", "WELD COUNTY S/D RE-8"]
     assert_equal names.sort, er.enrollments.keys.sort
   end
 
