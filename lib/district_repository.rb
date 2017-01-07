@@ -3,6 +3,7 @@ require_relative 'enrollment_repository'
 require 'csv'
 require 'pry'
 class DistrictRepository
+  include DataLoad
   attr_reader :districts,
               :er
   def initialize
@@ -12,11 +13,9 @@ class DistrictRepository
   def load_data(data)
     @er = EnrollmentRepository.new
     @er.load_data(data)
-    file_name = data[:enrollment][:kindergarten]
-    contents = CSV.open file_name,
-    headers: true, header_converters: :symbol
-
-    district_maker(contents)
+    contents = load_files(data)
+    kindergarten = contents[:kindergarten]
+    district_maker(kindergarten)
   end
 
   def district_maker(contents)

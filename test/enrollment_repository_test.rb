@@ -84,11 +84,10 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal Enrollment, enrollment.class
     assert_equal 0.39159, enrollment.kindergarten_participation_in_year(2007)
     assert_equal 0.26709, enrollment.kindergarten_participation_in_year(2005)
-    # assert_equal 0.89500, enrollment.graduation_rate_in_year(2010)
-    # assert_equal 0.89800, enrollment.graduation_rate_in_year(2014)
-    # expected = { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889,
-    #   2013 => 0.913, 2014 => 0.898 }
-    # assert_equal expected, enrollment.graduation_rate_by_year
-
+    assert_equal 0.89500, enrollment.graduation_rate_in_year(2010)
+    assert_equal 0.89800, enrollment.graduation_rate_in_year(2014)
+    expected = { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889,
+      2013 => 0.913, 2014 => 0.898 }
+    assert_equal expected, enrollment.graduation_rate_by_year
   end
 end
