@@ -28,6 +28,7 @@ class HeadcountAnalyst
 	end
 
 	def find_enrollment(district_name)
+		raise(NameError) if !dr.districts.has_key?(district_name)
 		dr.er.find_by_name(district_name)
 	end
 
