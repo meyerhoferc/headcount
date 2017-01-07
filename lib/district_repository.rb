@@ -3,6 +3,7 @@ require_relative 'enrollment_repository'
 require 'csv'
 require 'pry'
 class DistrictRepository
+  include DataLoad
   attr_reader :districts,
               :er
   def initialize
@@ -12,11 +13,9 @@ class DistrictRepository
   def load_data(data)
     @er = EnrollmentRepository.new
     @er.load_data(data)
-    file_name = data[:enrollment][:kindergarten]
-    contents = CSV.open file_name,
-    headers: true, header_converters: :symbol
-
-    district_maker(contents)
+    contents = load_files(data)
+    kindergarten = contents[:kindergarten]
+    district_maker(kindergarten)
   end
 
   def district_maker(contents)
@@ -29,12 +28,12 @@ class DistrictRepository
 
   def find_by_name(name)
     @districts[name.upcase]
-  end 
+  end
 
   def find_all_matching(sub_name)
     matching_districts = {}
-    @districts.each_pair do |key, value|
-      matching_districts[key] = value if key.include?(sub_name.upcase)
+    @districts.each do |name, district|
+      matching_districts[district.name] = district if district.name.start_with?(sub_name.upcase)
     end
     matching_districts.values
   end
