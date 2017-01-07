@@ -68,5 +68,4 @@ class HeadcountAnalystTest < Minitest::Test
     assert_raises(NameError) { ha.find_enrollment("MADEUP NAME") }
     assert_raises(NameError) { ha.kindergarten_participation_rate_variation('UNKNOWN 20', against: 'ARIZONA') }
   end
-
 end

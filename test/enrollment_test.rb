@@ -45,7 +45,6 @@ class EnrollmentTest < Minitest::Test
   end
 
   def test_grad_rate_by_year
-
     result = { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889, 2013 => 0.913, 2014 => 0.898 }
     assert_equal result, enrollment.graduation_rate_by_year
   end

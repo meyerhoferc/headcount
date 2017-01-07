@@ -1,7 +1,3 @@
-require_relative 'enrollment'
-require_relative 'enrollment_repository'
-require_relative 'district_repository'
-require_relative 'district'
 require 'pry'
 
 class HeadcountAnalyst
