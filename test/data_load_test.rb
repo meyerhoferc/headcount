@@ -20,7 +20,7 @@ class DataLoadTest < Minitest::Test
     assert_equal Hash, load_files(data).class
     assert_equal 2, load_files(data).count
     assert_equal [:kindergarten, :high_school_graduation], load_files(data).keys
-    assert_equal CSV, load_files(data).values.first.class
+    assert load_files(data).values.all? { |object| object.class == CSV }
   end
 
   def test_can_return_location_for_row

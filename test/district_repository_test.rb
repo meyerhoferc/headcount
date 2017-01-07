@@ -55,7 +55,6 @@ class DistrictRepositoryTest < Minitest::Test
 
   def test_can_return_all_matching_from_find_all_matching_search
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
-    result_1 = []
     assert_equal [], dr.find_all_matching("Tur")
     expected_2 = dr.find_all_matching("A")
     assert_equal 2, expected_2.count
