@@ -34,7 +34,9 @@ class EnrollmentRepositoryTest < Minitest::Test
   end
 
   def test_sample_data_names_are_in_enrollments_keys
-    er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
+    er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
+      :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
+
     assert_equal 28, er.enrollments.count
     names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300",
       "BENNETT 29J", "CROWLEY COUNTY RE-1-J", "CUSTER COUNTY SCHOOL DISTRICT C-1",
@@ -73,5 +75,11 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal Enrollment, enrollment.class
     assert_equal 0.47359, enrollment.kindergarten_participation_in_year(2007)
     assert_equal 0.20176, enrollment.kindergarten_participation_in_year(2005)
+  end
+
+  def test_adds_high_school_grad_data_in_load
+    skip
+    er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
+      :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
   end
 end
