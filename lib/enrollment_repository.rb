@@ -13,25 +13,40 @@ class EnrollmentRepository
   def load_data(data)
     contents = load_files(data)
     kindergarten = contents[:kindergarten]
-    enrollment_maker(kindergarten)
+    high_school_graduation = contents[:high_school_graduation]
+    #enrollment maker takes more args or maybe the hash or an array
+    enrollment_maker(kindergarten, high_school_graduation)
   end
 
-  def enrollment_maker(contents)
-    contents.each do |row|
+  def enrollment_maker(kindergarten, high_school_graduation)
+    kindergarten.each do |row|
       name = row[:location].upcase
       year, occupancy = kindergarten_participation_yearly(row)
       if @enrollments.has_key?(name)
         @enrollments[name].identifier[:kindergarten_participation][year] = occupancy
       else
         enrollment = Enrollment.new({ :name => name,
-          :kindergarten_participation => { year => occupancy }})
+          :kindergarten_participation => { year => occupancy },
+          :high_school_graduation => {}})
         @enrollments[name] = enrollment
+      end
+    end
+
+    unless high_school_graduation.nil?
+      high_school_graduation.each do |row|
+        name = row[:location].upcase
+        year, data = high_school_graduation_yearly(row)
+          @enrollments[name].identifier[:high_school_graduation][year] = data
       end
     end
   end
 
   def kindergarten_participation_yearly(row)
-    [clean_year(row[:timeframe]).to_i, clean_occupancy(row[:data]).to_f]
+    [clean_year(row[:timeframe]).to_i, clean_occupancy(row[:data]).to_f.round(3)]
+  end
+
+  def high_school_graduation_yearly(row)
+    [clean_year(row[:timeframe]).to_i, clean_occupancy(row[:data]).to_f.round(3)]
   end
 
   def clean_occupancy(occupancy)
