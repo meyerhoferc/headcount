@@ -5,7 +5,7 @@ class EnrollmentTest < Minitest::Test
   attr_reader :enrollment
   def setup
     @enrollment = Enrollment.new({:name => "ACADEMY 20",
-      :kindergarten_participation => { 2001 => 0.312, 2003 => 0.452 }, 
+      :kindergarten_participation => { 2001 => 0.312, 2003 => 0.452 },
       :high_school_graduation => { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889, 2013 => 0.913, 2014 => 0.898 }})
   end
 
@@ -46,7 +46,7 @@ class EnrollmentTest < Minitest::Test
 
   def test_grad_rate_by_year
     skip
-    result = { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889, 2013 => 0.913, 2014 => 0.898, }
+    result = { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889, 2013 => 0.913, 2014 => 0.898 }
     assert_equal result, enrollment.graduation_rate_by_year
   end
 

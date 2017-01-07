@@ -1,18 +1,22 @@
 require 'csv'
 require_relative 'enrollment'
+require_relative 'data_load'
 require 'pry'
 
 class EnrollmentRepository
+  include DataLoad
   attr_reader :enrollments
   def initialize
     @enrollments = Hash.new
   end
 
   def load_data(data)
-    file_name = data[:enrollment][:kindergarten]
-    contents = CSV.open file_name,
-    headers: true, header_converters: :symbol
-    enrollment_maker(contents) # passes in array of files?
+    # file_name = data[:enrollment][:kindergarten]
+    # contents = CSV.open file_name,
+    # headers: true, header_converters: :symbol
+    contents = load_files(data)
+    kindergarten = contents[:kindergarten]
+    enrollment_maker(kindergarten) # passes in hash of files w/tags (tag => file)
   end
 
   # def new_load_data(data)
@@ -25,7 +29,7 @@ class EnrollmentRepository
   #   enrollment_maker(kindergarten, high_school_graduation)
   # end
 
-  def enrollment_maker(contents) # perhaps contents is array ?
+  def enrollment_maker(contents) # perhaps contents is now a hash ?
     contents.each do |row|
       name = row[:location].upcase
       year, occupancy = kindergarten_participation_yearly(row)
