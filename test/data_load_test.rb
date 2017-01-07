@@ -4,27 +4,32 @@ require 'pry'
 
 class DataLoadTest < Minitest::Test
   include DataLoad
+  attr_reader :data
+  def setup
+    @data = {:enrollment =>
+      {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
+      :high_school_graduation =>
+      './test/fixtures/high_school_graduation_rates_sample.csv'}}
+  end
 
   def test_it_can_open_csv
-    skip
-    assert load_files('./test/fixtures/high_school_graduation_rates_sample.csv')
+    assert load_files(data)
   end
 
   def test_it_opening_returns_array_of_files
-    skip
-    assert_equal Array, load_files(files).class
-    assert_equal 3, load_files(files).count
+    assert_equal Array, load_files(data).class
+    assert_equal 2, load_files(data).count
   end
 
   def test_can_returns_column_of_data
-    skip
-    names = ['COLORADO', 'ACADEMY 20', 'ADAMS COUNTY 14', 'BIG SANDY 100J',
+    locations = ['COLORADO', 'ACADEMY 20', 'ADAMS COUNTY 14', 'BIG SANDY 100J',
     'BRIGGSDALE RE-10', 'DE BEQUE 49JT',
     'WELD COUNTY RE-1', 'WELD COUNTY S/D RE-8']
-    file = './test/fixtures/high_school_graduation_rates_sample.csv'
-    contents = load_files(file)
-    assert_equal Array, contents.get_column(location).class
-    assert_equal names, contents.get_column(location)
+    kindergarten, high_school_graduation = load_files(data)
+    assert_equal Array, get_column(kindergarten, location).class
+    assert_equal locations, get_column(kindergarten, location)
+    assert_equal Array, get_column(high_school_graduation, location).class
+    assert_equal locations, get_column(high_school_graduation, location)
   end
 
   def test_can_return_row_of_data

@@ -5,9 +5,8 @@ class EnrollmentTest < Minitest::Test
   attr_reader :enrollment
   def setup
     @enrollment = Enrollment.new({:name => "ACADEMY 20",
-      :kindergarten_participation => { 2001 => 0.312, 2003 => 0.452 }
-      :high_school_graduation => { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889, 2013 => 0.913, 2014 => 0.898 }
-      })
+      :kindergarten_participation => { 2001 => 0.312, 2003 => 0.452 }, 
+      :high_school_graduation => { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889, 2013 => 0.913, 2014 => 0.898 }})
   end
 
   def test_it_is_an_enrollment_class
