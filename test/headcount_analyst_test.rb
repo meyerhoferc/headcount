@@ -24,16 +24,18 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_can_find_average_enrollment_for_district
-    district_name = 'ADAMS-ARAPAHOE 28J'
+    district_name = 'ACADEMY 20'
     actual = ha.find_average(district_name)
-    expected = (0.47359 + 0.20176) / 2
+    data = [0.39159, 0.35364, 0.26709, 0.30201, 0.38456, 0.3900,
+      0.43628, 0.48900, 0.47883, 0.48774, 0.49022]
+    expected = (data.reduce(:+) / data.count)
     assert_equal expected.round(5), actual
     assert_equal 0.53039, ha.find_average('COLORADO')
   end
 
   def test_can_compare_two_averages
-    district_name = 'ADAMS-ARAPAHOE 28J'
-    district_name_2 = 'DENVER COUNTY 1'
+    district_name = 'ACADEMY 20'
+    district_name_2 = 'ADAMS COUNTY 14'
     district_1_average = ha.find_average(district_name)
     district_2_average = ha.find_average(district_name_2)
     expected = district_1_average / district_2_average
