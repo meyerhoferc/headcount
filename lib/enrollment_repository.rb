@@ -14,6 +14,16 @@ class EnrollmentRepository
     headers: true, header_converters: :symbol
     enrollment_maker(contents)
   end
+  #
+  # def load_data(data)
+  #   kindergarten = data[:enrollment][:kindergarten]
+  #   high_school_graduation = data[:high_school_graduation]
+  #   kindergarten = CSV.open kindergarten,
+  #   headers: true, header_converters: :symbol
+  #   high_school_graduation = CSV.open high_school_graduation,
+  #   headers: true, header_converters: :symbol
+  #   enrollment_maker(kindergarten, high_school_graduation)
+  # end
 
   def enrollment_maker(contents)
     contents.each do |row|

@@ -37,14 +37,10 @@ class EnrollmentRepositoryTest < Minitest::Test
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
       :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
 
-    assert_equal 28, er.enrollments.count
-    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300",
-      "BENNETT 29J", "CROWLEY COUNTY RE-1-J", "CUSTER COUNTY SCHOOL DISTRICT C-1",
-      "DE BEQUE 49JT", "DEER TRAIL 26J", "DEL NORTE C-7", "DELTA COUNTY 50(J)", "DENVER COUNTY 1",
-      "DOLORES COUNTY RE NO.2", "DOLORES RE-4A", "DOUGLAS COUNTY RE 1",
-      "DURANGO 9-R", "EADS RE-1", "EAGLE COUNTY RE 50", "EAST GRAND 2",
-      "EAST OTERO R-1", "EAST YUMA COUNTY RJ-2", "EATON RE-2", "EDISON 54 JT",
-      "ELBERT 200", "ELIZABETH C-1", "ELLICOTT 22", "YUMA SCHOOL DISTRICT 1"]
+    assert_equal 8, er.enrollments.count
+    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "BIG SANDY 100J",
+    "BRIGGSDALE RE-10", "DE BEQUE 49JT", "WELD COUNTY RE-1",
+    "WELD COUNTY S/D RE-8"]
     assert_equal names.sort, er.enrollments.keys.sort
   end
 
@@ -70,11 +66,11 @@ class EnrollmentRepositoryTest < Minitest::Test
 
   def test_can_find_enrollment_for_district_in_year
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
-    enrollment = er.find_by_name("ADAMS-ARAPAHOE 28J")
-    assert_equal "ADAMS-ARAPAHOE 28J", enrollment.name
+    enrollment = er.find_by_name("ACADEMY 20")
+    assert_equal "ACADEMY 20", enrollment.name
     assert_equal Enrollment, enrollment.class
-    assert_equal 0.47359, enrollment.kindergarten_participation_in_year(2007)
-    assert_equal 0.20176, enrollment.kindergarten_participation_in_year(2005)
+    assert_equal 0.39159, enrollment.kindergarten_participation_in_year(2007)
+    assert_equal 0.26709, enrollment.kindergarten_participation_in_year(2005)
   end
 
   def test_adds_high_school_grad_data_in_load
