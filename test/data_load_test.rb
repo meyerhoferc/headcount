@@ -23,15 +23,18 @@ class DataLoadTest < Minitest::Test
   end
 
   def test_can_return_location_for_row
+    skip
+    rows = [["BRIGGSDALE RE-10",2010,Percent,1], ["BIG SANDY 100J",2010,Percent,1],
+  ["ACADEMY 20",2013,Percent,0.91373], ["ADAMS COUNTY 14",2011,Percent,0.608]]
 
   end
 
   def test_can_return_time_for_row
-
+    skip
   end
 
   def test_can_return_data_for_row
-
+    skip
   end
 
 end

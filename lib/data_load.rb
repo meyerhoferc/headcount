@@ -2,8 +2,7 @@ require 'csv'
 module DataLoad
   def load_files(file)
     files = file[:enrollment]
-    tagged_files = {}
-    files.map do |data_tag, file|
+    tagged_files = files.each_pair do |data_tag, file|
       contents = CSV.open(file, headers: true, header_converters: :symbol)
       tagged_files[data_tag] = contents
     end
