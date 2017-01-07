@@ -81,5 +81,11 @@ class EnrollmentRepositoryTest < Minitest::Test
     skip
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
       :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
+    assert_equal "ACADEMY 20", enrollment.name
+    assert_equal Enrollment, enrollment.class
+    assert_equal 0.39159, enrollment.kindergarten_participation_in_year(2007)
+    assert_equal 0.26709, enrollment.kindergarten_participation_in_year(2005)
+    assert_equal 0.89500, enrollment.graduation_rate_in_year(2010)
+    assert_equal 0.89800, enrollment.graduation_rate_in_year(2014)
   end
 end
