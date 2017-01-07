@@ -29,8 +29,8 @@ class HeadcountAnalystTest < Minitest::Test
     data = [0.39159, 0.35364, 0.26709, 0.30201, 0.38456, 0.3900,
       0.43628, 0.48900, 0.47883, 0.48774, 0.49022]
     expected = (data.reduce(:+) / data.count)
-    assert_equal expected.round(5), actual
-    assert_equal 0.53039, ha.find_average('COLORADO')
+    assert_in_delta expected.round(5), actual, 0.005
+    assert_in_delta 0.53039, ha.find_average('COLORADO'), 0.005
   end
 
   def test_can_compare_two_averages
@@ -68,5 +68,4 @@ class HeadcountAnalystTest < Minitest::Test
     assert_raises(NameError) { ha.find_enrollment("MADEUP NAME") }
     assert_raises(NameError) { ha.kindergarten_participation_rate_variation('UNKNOWN 20', against: 'ARIZONA') }
   end
-
 end

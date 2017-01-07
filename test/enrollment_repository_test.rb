@@ -71,23 +71,42 @@ class EnrollmentRepositoryTest < Minitest::Test
     enrollment = er.find_by_name("ACADEMY 20")
     assert_equal "ACADEMY 20", enrollment.name
     assert_equal Enrollment, enrollment.class
-    assert_equal 0.39159, enrollment.kindergarten_participation_in_year(2007)
-    assert_equal 0.26709, enrollment.kindergarten_participation_in_year(2005)
+    assert_equal 0.392, enrollment.kindergarten_participation_in_year(2007)
+    assert_equal 0.267, enrollment.kindergarten_participation_in_year(2005)
+  end
+
+  def test_returns_correctly_formatted_data_for_hs_graduation
+    er_2.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
+      :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
+    row_1 = "ACADEMY 20,2012,Percent,0.88983"
+    row_2 = "ADAMS COUNTY 14,2012,Percent,0.63372"
+    year_1, year_2 = ["2012", "2012"]
+    data_1, data_2 = ["0.88983", "0.63372"]
+    assert_equal "2012", er.clean_year(year_1)
+    assert_equal "2012", er.clean_year(year_2)
+    assert_in_delta 0.889, er.clean_occupancy(data_1).to_f.round(3), 0.005
+    assert_in_delta 0.634, er.clean_occupancy(data_2).to_f.round(3), 0.005
   end
 
   def test_adds_high_school_grad_data_in_load
-    skip
-    er_2.new_load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
+    er_2.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
       :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
     enrollment = er_2.find_by_name("acaDEmy 20")
+
     assert_equal "ACADEMY 20", enrollment.name
     assert_equal Enrollment, enrollment.class
-    assert_equal 0.39159, enrollment.kindergarten_participation_in_year(2007)
-    assert_equal 0.26709, enrollment.kindergarten_participation_in_year(2005)
-    assert_equal 0.89500, enrollment.graduation_rate_in_year(2010)
-    assert_equal 0.89800, enrollment.graduation_rate_in_year(2014)
+
+    assert_equal 0.392, enrollment.kindergarten_participation_in_year(2007)
+    assert_equal 0.267, enrollment.kindergarten_participation_in_year(2005)
+    assert_equal 0.895, enrollment.graduation_rate_in_year(2010)
+    assert_equal 0.898, enrollment.graduation_rate_in_year(2014)
+
     expected = { 2010 => 0.895, 2011 => 0.895, 2012 => 0.889,
       2013 => 0.913, 2014 => 0.898 }
-    assert_equal expected, enrollment.graduation_rate_by_year
+    actual = enrollment.graduation_rate_by_year
+    
+    expected.each_pair do |year, data|
+      assert_in_delta data, actual[year], 0.005
+    end
   end
 end
