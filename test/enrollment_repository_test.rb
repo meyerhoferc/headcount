@@ -76,6 +76,7 @@ class EnrollmentRepositoryTest < Minitest::Test
   end
 
   def test_adds_high_school_grad_data_in_load
+    skip
     er_2.new_load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
       :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
     enrollment = er_2.find_by_name("acaDEmy 20")
