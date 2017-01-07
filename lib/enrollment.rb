@@ -17,4 +17,13 @@ class Enrollment
   def name
     @identifier[:name]
   end
+
+  def graduation_rate_by_year
+    @identifier[:high_school_graduation]
+
+  end
+
+  def graduation_rate_in_year(year)
+    @identifier[:high_school_graduation][year]
+  end
 end
