@@ -12,20 +12,20 @@ class EnrollmentRepository
     file_name = data[:enrollment][:kindergarten]
     contents = CSV.open file_name,
     headers: true, header_converters: :symbol
-    enrollment_maker(contents)
+    enrollment_maker(contents, other_data = @enrollments)
   end
-  #
-  # def load_data(data)
-  #   kindergarten = data[:enrollment][:kindergarten]
-  #   high_school_graduation = data[:high_school_graduation]
-  #   kindergarten = CSV.open kindergarten,
-  #   headers: true, header_converters: :symbol
-  #   high_school_graduation = CSV.open high_school_graduation,
-  #   headers: true, header_converters: :symbol
-  #   enrollment_maker(kindergarten, high_school_graduation)
-  # end
 
-  def enrollment_maker(contents)
+  def new_load_data(data)
+    kindergarten = data[:enrollment][:kindergarten]
+    high_school_graduation = data[:enrollment][:high_school_graduation]
+    kindergarten = CSV.open kindergarten,
+    headers: true, header_converters: :symbol
+    high_school_graduation = CSV.open high_school_graduation,
+    headers: true, header_converters: :symbol
+    enrollment_maker(kindergarten, high_school_graduation)
+  end
+
+  def enrollment_maker(contents, contents2)
     contents.each do |row|
       name = row[:location].upcase
       year, occupancy = kindergarten_participation_yearly(row)
