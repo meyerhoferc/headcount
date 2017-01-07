@@ -19,7 +19,12 @@ class EnrollmentRepository
   end
 
   def enrollment_maker(kindergarten, high_school_graduation)
-    kindergarten.each do |row|
+    add_kindergarten_participation_data(kindergarten)
+    add_high_school_graduation_data(high_school_graduation)
+  end
+
+  def add_kindergarten_participation_data(file)
+    file.each do |row|
       name = row[:location].upcase
       year, occupancy = kindergarten_participation_yearly(row)
       if @enrollments.has_key?(name)
@@ -31,9 +36,11 @@ class EnrollmentRepository
         @enrollments[name] = enrollment
       end
     end
+  end
 
-    unless high_school_graduation.nil?
-      high_school_graduation.each do |row|
+  def add_high_school_graduation_data(file)
+    unless file.nil?
+      file.each do |row|
         name = row[:location].upcase
         year, data = high_school_graduation_yearly(row)
           @enrollments[name].identifier[:high_school_graduation][year] = data
