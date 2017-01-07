@@ -26,14 +26,10 @@ class DistrictRepositoryTest < Minitest::Test
 
   def test_sample_data_names_are_in_districts_keys
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
-    assert_equal 28, dr.districts.count
-    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "ADAMS-ARAPAHOE 28J", "AGATE 300",
-      "BENNETT 29J", "CROWLEY COUNTY RE-1-J", "CUSTER COUNTY SCHOOL DISTRICT C-1",
-      "DE BEQUE 49JT", "DEER TRAIL 26J", "DEL NORTE C-7", "DELTA COUNTY 50(J)", "DENVER COUNTY 1",
-      "DOLORES COUNTY RE NO.2", "DOLORES RE-4A", "DOUGLAS COUNTY RE 1",
-      "DURANGO 9-R", "EADS RE-1", "EAGLE COUNTY RE 50", "EAST GRAND 2",
-      "EAST OTERO R-1", "EAST YUMA COUNTY RJ-2", "EATON RE-2", "EDISON 54 JT",
-      "ELBERT 200", "ELIZABETH C-1", "ELLICOTT 22", "YUMA SCHOOL DISTRICT 1"]
+    assert_equal 8, dr.districts.count
+    names = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "BIG SANDY 100J",
+      "BRIGGSDALE RE-10", "DE BEQUE 49JT", "WELD COUNTY RE-1",
+      "WELD COUNTY S/D RE-8"]
     assert_equal names.sort, dr.districts.keys.sort
   end
 
@@ -60,16 +56,15 @@ class DistrictRepositoryTest < Minitest::Test
   def test_can_return_all_matching_from_find_all_matching_search
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     result_1 = []
-    expected_1 = dr.find_all_matching("Tur")
-    expected_2 = dr.find_all_matching("ADA")
-    assert_equal result_1, expected_1
+    assert_equal [], dr.find_all_matching("Tur")
+    expected_2 = dr.find_all_matching("A")
     assert_equal 2, expected_2.count
     assert expected_2.all? { |district| district.class == District }
   end
 
   def test_find_all_returns_matching_from_case_insensitive_search
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
-    expected = dr.find_all_matching("ada")
+    expected = dr.find_all_matching("a")
     assert_equal 2, expected.count
     assert expected.all? { |district| district.class == District }
   end
