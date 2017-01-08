@@ -10,7 +10,8 @@ class HeadcountAnalystTest < Minitest::Test
               :ha
   def setup
     @dr = DistrictRepository.new
-    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
+    dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
+      :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
     @ha = HeadcountAnalyst.new(dr)
   end
 
@@ -25,21 +26,21 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_can_find_average_enrollment_for_district
     district_name = 'ACADEMY 20'
-    actual = ha.find_average(district_name)
+    actual = ha.find_average(district_name, :kindergarten)
     data = [0.39159, 0.35364, 0.26709, 0.30201, 0.38456, 0.3900,
       0.43628, 0.48900, 0.47883, 0.48774, 0.49022]
     expected = (data.reduce(:+) / data.count)
     assert_in_delta expected.round(5), actual, 0.005
-    assert_in_delta 0.53039, ha.find_average('COLORADO'), 0.005
+    assert_in_delta 0.53039, ha.find_average('COLORADO', :kindergarten), 0.005
   end
 
   def test_can_compare_two_averages
     district_name = 'ACADEMY 20'
     district_name_2 = 'ADAMS COUNTY 14'
-    district_1_average = ha.find_average(district_name)
-    district_2_average = ha.find_average(district_name_2)
+    district_1_average = ha.find_average(district_name, :kindergarten)
+    district_2_average = ha.find_average(district_name_2, :kindergarten)
     expected = district_1_average / district_2_average
-    actual = ha.compare_averages(district_name, district_name_2)
+    actual = ha.compare_averages(district_name, district_name_2, :kindergarten)
     assert_equal expected.round(3), actual
   end
 
@@ -49,7 +50,7 @@ class HeadcountAnalystTest < Minitest::Test
     actual_1 = ha.kindergarten_participation_rate_variation(district_1_name, :against => 'COLORADO')
     actual_2 = ha.kindergarten_participation_rate_variation(district_2_name, :against => 'COLORADO')
     assert_equal 0.766, actual_2
-    expected = ha.compare_averages(district_1_name, 'COLORADO')
+    expected = ha.compare_averages(district_1_name, 'COLORADO', :kindergarten)
     assert_equal expected, ha.kindergarten_participation_rate_variation('ADAMS-ARAPAHOE 28J', :against => 'COLORADO')
     assert_equal 1.0, ha.kindergarten_participation_rate_variation('ACADEMY 20', :against => 'ACADEMY 20')
   end
@@ -67,5 +68,20 @@ class HeadcountAnalystTest < Minitest::Test
   def test_returns_unknown_data_error
     assert_raises(NameError) { ha.find_enrollment("MADEUP NAME") }
     assert_raises(NameError) { ha.kindergarten_participation_rate_variation('UNKNOWN 20', against: 'ARIZONA') }
+  end
+
+  def test_adds_high_school_grad_variation_against_state_performance
+    district_name_1 = "ACADEMY 20"
+    state = 'COLORADO'
+    actual_1 = ha.high_school_graduation_rate_variation(district_name_1, :against => "COLORADO")
+    assert_in_delta 1.195, actual_1, 0.005
+  end
+
+  def test_compares_kindergarten_and_high_school_data
+    high_school = ha.high_school_graduation_rate_variation('ACADEMY 20', :against => "COLORADO")
+    kindergarten = ha.kindergarten_participation_rate_variation('ACADEMY 20', :against => 'COLORADO')
+    variation = kindergarten / high_school
+    actual = ha.kindergarten_participation_against_high_school_graduation('ACADEMY 20')
+    assert_in_delta variation, actual, 0.005
   end
 end
