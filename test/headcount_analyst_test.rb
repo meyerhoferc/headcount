@@ -84,4 +84,18 @@ class HeadcountAnalystTest < Minitest::Test
     actual = ha.kindergarten_participation_against_high_school_graduation('ACADEMY 20')
     assert_in_delta variation, actual, 0.005
   end
+
+  def test_checks_for_correlation_between_kindergarten_and_high_school
+    dr_2 = DistrictRepository.new
+    dr_2.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv",
+      :high_school_graduation => "./data/High school graduation rates.csv"}})
+    ha_2 = HeadcountAnalyst.new(dr_2)
+    assert ha_2.kindergarten_participation_correlates_with_high_school_graduation(for: 'ACADEMY 20')
+    refute ha_2.kindergarten_participation_correlates_with_high_school_graduation(for: 'MONTROSE COUNTY RE-1J')
+    refute ha_2.kindergarten_participation_correlates_with_high_school_graduation(for: 'SIERRA GRANDE R-30')
+    assert ha_2.kindergarten_participation_correlates_with_high_school_graduation(for: 'PARK (ESTES PARK) R-3')
+    refute ha.kindergarten_participation_correlates_with_high_school_graduation(:for => 'STATEWIDE')
+    districts = ["ACADEMY 20", 'PARK (ESTES PARK) R-3', 'YUMA SCHOOL DISTRICT 1']
+    assert ha.kindergarten_participation_correlates_with_high_school_graduation(:across => districts)
+  end
 end
