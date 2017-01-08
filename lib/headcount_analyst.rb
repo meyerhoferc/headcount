@@ -57,27 +57,35 @@ class HeadcountAnalyst
 	end
 
 	def kindergarten_participation_correlates_with_high_school_graduation(settings)
-		name = settings[:for]
+		name = settings[:for] if settings.has_key?(:for)
+		name = settings[:across] if settings.has_key?(:across)
 		if name == 'STATEWIDE'
 			check_statewide
+		elsif name.class == Array
+			check_across_districts(name)
 		else
 			ratio = kindergarten_participation_against_high_school_graduation(name, settings)
 			ratio <= 1.5 && ratio >= 0.6
 		end
 	end
 
-	#
-	# def kindergarten_participation_correlates_with_high_school_graduation(settings)
-	# 	name = settings[:for]
-	# 	ratio = kindergarten_participation_against_high_school_graduation(name, settings)
-	# 	ratio <= 1.5 && ratio >= 0.6
-	# end
+	def check_across_districts(districts)
+		ratios = []
+		districts.each do |district|
+			ratios << kindergarten_participation_against_high_school_graduation(district)
+		end
+		check_in_range(ratios)
+	end
 
 	def check_statewide
 		ratios = []
 		dr.er.enrollments.each_pair do |name, enrollment|
 			ratios << kindergarten_participation_against_high_school_graduation(name)
 		end
+		check_in_range(ratios)
+	end
+
+	def check_in_range(ratios)
 		number = ratios.count do |ratio|
 			ratio <= 1.5 && ratio >= 0.6
 		end
