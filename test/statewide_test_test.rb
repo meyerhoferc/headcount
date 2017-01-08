@@ -3,7 +3,7 @@ require './lib/statewide_test'
 require './lib/statewide_test_repo'
 
 class StatewideTestTest < Minitest::Test
-  attr_reader :st
+  attr_reader :st, :math, :reading, :writing, :third_grade, :eighth_grade
   def setup
     third_grade_math = { 2008 => 0.857, 2009 => 0.824, 2010 => 0.849,
       2011 => 0.819, 2012 => 0.83, 2013 => 0.8554, 2014 => 0.8345}
@@ -14,7 +14,7 @@ class StatewideTestTest < Minitest::Test
     third_grade_writing = { 2008 => 0.671, 2009 => 0.706, 2010 => 0.662,
       2011 => 0.678, 2012 => 0.65517, 2013 => 0.6687, 2014 => 0.63942}
 
-    third_grade = { :math => third_grade_math,
+    @third_grade = { :math => third_grade_math,
       :reading => third_grade_reading,:writing => third_grade_writing }
 
     eighth_grade_math = { 2008 => 0.64, 2009 => 0.656, 2010 => 0.672,
@@ -24,7 +24,7 @@ class StatewideTestTest < Minitest::Test
     eighth_grade_writing = { 2008 => 0.734, 2009 => 0.701, 2010 => 0.754,
       2011 => 0.74579, 2012 => 0.73839, 2013 => 0.75069, 2014 => 0.74789}
 
-    eighth_grade = { :math => eighth_grade_math,
+    @eighth_grade = { :math => eighth_grade_math,
       :reading => eighth_grade_reading, :writing => eighth_grade_writing }
 
     all_math = { 2011 => 0.68, 2012 => 0.6894,
@@ -44,7 +44,7 @@ class StatewideTestTest < Minitest::Test
     white_math = { 2011 => 0.7065, 2012 => 0.7135,
       2013 => 0.7208, 2014 => 0.723 }
 
-    math = { :all => all_math, :asian => asian_math, :black => black_math,
+    @math = { :all => all_math, :asian => asian_math, :black => black_math,
       :hawaiian_pacific_islander => hpi_math, :hispanic => hispanic_math,
       :native_american => native_american_math, :two_or_more => two_or_more_math,
       :white => white_math}
@@ -66,7 +66,7 @@ class StatewideTestTest < Minitest::Test
     white_reading = { 2011 => 0.8513, 2012 => 0.86189,
       2013 => 0.86083, 2014 => 0.00856 }
 
-    reading = { :all => all_reading, :asian => asian_reading,
+    @reading = { :all => all_reading, :asian => asian_reading,
       :black => black_reading, :hawaiian_pacific_islander => hpi_reading,
       :hispanic => hispanic_reading, :native_american => native_american_reading,
       :two_or_more => two_or_more_reading, :white => white_reading }
@@ -88,7 +88,7 @@ class StatewideTestTest < Minitest::Test
     white_writing = { 2011 => 0.7401, 2012 => 0.7262,
       2013 => 0.7406, 2014 => 0.7348 }
 
-    writing = :writing => { :all => all_writing, :asian => asian_writing,
+    @writing = :writing => { :all => all_writing, :asian => asian_writing,
       :black => black_writing, :hawaiian_pacific_islander => hpi_writing,
       :hispanic => hispanic_writing, :native_american => native_american_writing,
       :two_or_more => two_or_more_writing, :white => white_writing }
@@ -100,45 +100,64 @@ class StatewideTestTest < Minitest::Test
 
   def test_it_is_a_statewide_test
     skip
+    assert_equal StatewideTest, st.class
   end
 
   def test_knows_its_name
     skip
+    assert_equal 'ACADEMY 20', st.name
   end
 
   def test_can_return_all_math_data
     skip
+    assert_equal math, st.identifier[:math]
   end
 
   def test_can_return_all_third_grade_data
     skip
+    assert_equal third_grade, st.identifier[:third_grade]
   end
 
   def test_knows_keys_in_identifier
     skip
+    assert_equal [:name, :math, :reading, :writing, :third_grade, :eighth_grade].sort, st.identifier.keys.sort 
   end
 
   def test_proficient_by_grade_returns_years_and_scores
     skip
+    assert_equal third_grade, st.proficient_by_grade(3)
+    assert_equal eighth_grade, st.proficient_by_grade(8)
   end
 
   def test_proficient_by_grade_returns_unknwon_data_error
     skip
     #if not grades 3 or 8
+    assert_raises UnknownDataError, st.proficient_by_grade(6)
   end
 
   def test_proficient_for_subject_by_grade_in_year_returns_data
     skip
     #takes 3 args => 3 digit Float or UnknownGradeError
+    assert_equal 0.857, st.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
   end
 
   def test_proficient_for_subject_by_race_in_year_returns_data_or_error
     skip
-    #takes 3 args => 3 digit float or UnknownRaceError
+    assert_raises UnknownRaceError, st.proficient_for_subject_by_race_in_year(:math, :purple, 2012)
+    assert_equal 0.818, st.proficient_for_subject_by_race_in_year(:math, :asian, 2012)
   end
 
   def test_proficient_by_race_or_ethnicity_returns_years_and_scores_for_race
     skip
     #takes (:race), UnknownRaceError if not in array of races
+    expected = { 2011 => {math: 0.816, reading: 0.897, writing: 0.826},
+     2012 => {math: 0.818, reading: 0.893, writing: 0.808},
+     2013 => {math: 0.805, reading: 0.901, writing: 0.810},
+     2014 => {math: 0.800, reading: 0.855, writing: 0.789},
+    }
+    #verify the hash above--might be incorrect
+    #takes 3 args => 3 digit float or UnknownRaceError
+    assert_raises UnknownRaceError, st.proficient_by_race_or_ethnicity(:purple)
+    assert_equal expected, st.proficient_by_race_or_ethnicity(:asian)
   end
 end
