@@ -1,0 +1,2 @@
+class UnknownRaceError < Exception
+end
