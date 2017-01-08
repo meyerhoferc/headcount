@@ -1,2 +1,2 @@
 class StatewideTestRepo
-end 
+end
