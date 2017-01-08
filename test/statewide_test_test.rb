@@ -97,4 +97,48 @@ class StatewideTestTest < Minitest::Test
       :eighth_grade => eighth_grade, :math => math , :reading => reading,
       :writing => writing })
   end
+
+  def test_it_is_a_statewide_test
+    skip
+  end
+
+  def test_knows_its_name
+    skip
+  end
+
+  def test_can_return_all_math_data
+    skip
+  end
+
+  def test_can_return_all_third_grade_data
+    skip
+  end
+
+  def test_knows_keys_in_identifier
+    skip
+  end
+
+  def test_proficient_by_grade_returns_years_and_scores
+    skip
+  end
+
+  def test_proficient_by_grade_returns_unknwon_data_error
+    skip
+    #if not grades 3 or 8
+  end
+
+  def test_proficient_for_subject_by_grade_in_year_returns_data
+    skip
+    #takes 3 args => 3 digit Float or UnknownGradeError
+  end
+
+  def test_proficient_for_subject_by_race_in_year_returns_data_or_error
+    skip
+    #takes 3 args => 3 digit float or UnknownRaceError
+  end
+
+  def test_proficient_by_race_or_ethnicity_returns_years_and_scores_for_race
+    skip
+    #takes (:race), UnknownRaceError if not in array of races
+  end
 end
