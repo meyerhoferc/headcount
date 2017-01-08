@@ -97,6 +97,6 @@ class HeadcountAnalystTest < Minitest::Test
     refute ha_2.check_statewide
     refute ha_2.kindergarten_participation_correlates_with_high_school_graduation(:for => 'STATEWIDE')
     districts = ["ACADEMY 20", 'PARK (ESTES PARK) R-3', 'YUMA SCHOOL DISTRICT 1']
-    # assert ha.kindergarten_participation_correlates_with_high_school_graduation(:across => districts)
+    assert ha_2.kindergarten_participation_correlates_with_high_school_graduation(:across => districts)
   end
 end
