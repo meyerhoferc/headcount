@@ -28,11 +28,13 @@ class EnrollmentRepository
       name = row[:location].upcase
       year, occupancy = kindergarten_participation_yearly(row)
       if @enrollments.has_key?(name)
+        occupancy = 0 if occupancy.to_s == "N/A" || occupancy.to_s.chars[-1] == "!"
         @enrollments[name].identifier[:kindergarten_participation][year] = occupancy
       else
         enrollment = Enrollment.new({ :name => name,
           :kindergarten_participation => { year => occupancy },
           :high_school_graduation => {}})
+          occupancy = 0 if occupancy.to_s == "N/A" || occupancy.to_s.chars[-1] == "!"
         @enrollments[name] = enrollment
       end
     end
@@ -43,7 +45,8 @@ class EnrollmentRepository
       file.each do |row|
         name = row[:location].upcase
         year, data = high_school_graduation_yearly(row)
-          @enrollments[name].identifier[:high_school_graduation][year] = data
+        data = 0 if  data.to_s == "N/A" || data.to_s.chars[-1] == "!"
+        @enrollments[name].identifier[:high_school_graduation][year] = data
       end
     end
   end

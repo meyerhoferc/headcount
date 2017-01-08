@@ -6,21 +6,36 @@ class HeadcountAnalyst
 		@dr = dr
 	end
 
-	def find_average(district_name)
+	def find_average(district_name, data_tag)
 		enrollment = find_enrollment(district_name)
-		enrollment_data = enrollment.kindergarten_participation_by_year
+
+		enrollment_data = enrollment.kindergarten_participation_by_year if data_tag == :kindergarten
+		enrollment_data = enrollment.graduation_rate_by_year if data_tag == :high_school_graduation
+
 		enrollment_data = enrollment_data.map { |year, value| value }
-		(enrollment_data.reduce(:+) / enrollment_data.count).round(5)
+		unless enrollment_data.nil?
+			(enrollment_data.reduce(:+) / enrollment_data.count).round(5)
+		end
 	end
 
-	def compare_averages(district_1_name, district_2_name)
-		district_1_average = find_average(district_1_name)
-		district_2_average = find_average(district_2_name)
+	def compare_averages(district_1_name, district_2_name, data_tag)
+		district_1_average = find_average(district_1_name, data_tag)
+		district_2_average = find_average(district_2_name, data_tag)
 		(district_1_average / district_2_average).round(3)
 	end
 
 	def kindergarten_participation_rate_variation(district_name, comparison)
-		compare_averages(district_name, comparison[:against])
+		compare_averages(district_name, comparison[:against], :kindergarten)
+	end
+
+	def high_school_graduation_rate_variation(district_name, comparison)
+		compare_averages(district_name, comparison[:against], :high_school_graduation)
+	end
+
+	def kindergarten_participation_against_high_school_graduation(district_name, comparison = {:against => 'COLORADO'})
+			high_school = high_school_graduation_rate_variation(district_name, :against => 'COLORADO')
+			kindergarten = kindergarten_participation_rate_variation(district_name, :against => 'COLORADO')
+			(kindergarten / high_school).round(3)
 	end
 
 	def find_enrollment(district_name)
@@ -39,5 +54,33 @@ class HeadcountAnalyst
 			result[year] = ratio
 		end
 		result.sort.to_h
+	end
+
+	def kindergarten_participation_correlates_with_high_school_graduation(settings)
+		name = settings[:for]
+		if name == 'STATEWIDE'
+			check_statewide
+		else
+			ratio = kindergarten_participation_against_high_school_graduation(name, settings)
+			ratio <= 1.5 && ratio >= 0.6
+		end
+	end
+
+	#
+	# def kindergarten_participation_correlates_with_high_school_graduation(settings)
+	# 	name = settings[:for]
+	# 	ratio = kindergarten_participation_against_high_school_graduation(name, settings)
+	# 	ratio <= 1.5 && ratio >= 0.6
+	# end
+
+	def check_statewide
+		ratios = []
+		dr.er.enrollments.each_pair do |name, enrollment|
+			ratios << kindergarten_participation_against_high_school_graduation(name)
+		end
+		number = ratios.count do |ratio|
+			ratio <= 1.5 && ratio >= 0.6
+		end
+		number / ratios.count >= 0.7
 	end
 end
