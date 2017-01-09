@@ -22,17 +22,16 @@ class StatewideTestRepo
   def add_third_grade_data(file)
     file.each do |row|
       name = row[:location].upcase
-      year, subject, data = third_grade_yearly(row)
+      year, subject, data = third_grade_yearly(row) #clean data
       if @swtests.has_key?(name)
         @swtests[name].identifier[:third_grade][year] = data
       else
         swtest = StatewideTest.new({ :name => name,
-          :third_grade => { year => occupancy },
+          :third_grade => { year[subject] = data }, #format
           :eighth_grade => {}, :asian => {}, :all => {},
           :pacific_islander => {}, :native_american => {}, :hispanic => {},
           :two_or_more => {}, :white => {}, :black => {} })
-          occupancy = 0 if occupancy.to_s == "N/A" || occupancy.to_s.chars[-1] == "!"
-        @enrollments[name] = enrollment
+        @swtests[:name] = swtest
       end
     end
   end
