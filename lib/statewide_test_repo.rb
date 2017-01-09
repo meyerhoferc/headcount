@@ -33,7 +33,8 @@ class StatewideTestRepo
       # data is the percent in 3 digit float
       if @swtests.has_key?(name)
         swtest = @swtests[name]
-        swtest.identifier[data_tag][tag][year] = data
+        return swtest.identifier[data_tag][year][tag] = data if data_tag == :score
+        swtest.identifier[tag]
       else
         # binding.pry
         swtest = StatewideTest.new({ :name => name,
@@ -41,6 +42,9 @@ class StatewideTestRepo
           :eighth_grade => {}, :asian => {}, :all => {},
           :pacific_islander => {}, :native_american => {}, :hispanic => {},
           :two_or_more => {}, :white => {}, :black => {} })
+          # do we want a :race_ethnicity symbol to hold the hash of all races?
+          # it should fix the issue on line 36
+
           # not sure if the hash will work this way, adding the third grade data first
           # I think it should because third grade is the first file put into the tagged_data hash
         @swtests[name] = swtest

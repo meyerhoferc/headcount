@@ -33,8 +33,6 @@ class StatewideTestRepoTest < Minitest::Test
     names = ['COLORADO', 'ACADEMY 20', 'ADAMS COUNTY 14',
       'ADAMS-ARAPAHOE 28J', 'BIG SANDY 100J']
     assert_equal names.sort, str.swtests.keys.sort
-    # use data load module
-    # look at LNE and N/A and 0 conditionals
   end
 
   def test_can_find_swt_by_name
@@ -50,8 +48,6 @@ class StatewideTestRepoTest < Minitest::Test
     st = str.find_by_name('ACADEMY 20')
     assert_equal 0.857, st.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
   end
-
-
 
   # check out enrollment repo for more test inspiration
 end
