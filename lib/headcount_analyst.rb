@@ -33,9 +33,9 @@ class HeadcountAnalyst
 	end
 
 	def kindergarten_participation_against_high_school_graduation(district_name, comparison = {:against => 'COLORADO'})
-			high_school = high_school_graduation_rate_variation(district_name, :against => 'COLORADO')
-			kindergarten = kindergarten_participation_rate_variation(district_name, :against => 'COLORADO')
-			(kindergarten / high_school).round(3)
+		high_school = high_school_graduation_rate_variation(district_name, :against => 'COLORADO')
+		kindergarten = kindergarten_participation_rate_variation(district_name, :against => 'COLORADO')
+		(kindergarten / high_school).round(3)
 	end
 
 	def find_enrollment(district_name)
