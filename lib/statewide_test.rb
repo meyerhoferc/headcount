@@ -1,6 +1,5 @@
 require_relative 'unknown_data_error'
 require_relative 'unknown_race_error'
-require 'pry'
 
 class StatewideTest
   attr_reader :identifier
@@ -14,8 +13,6 @@ class StatewideTest
 
   def proficient_by_grade(grade)
     available_grades = [3, 8]
-    # return @identifier.fetch(:third_grade, nil) if grade == 3
-    # raise(UnknownDataError) if !available_grades.include?(grade)
     if grade == 3
       @identifier[:third_grade]
     elsif grade == 8
