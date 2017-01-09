@@ -66,8 +66,8 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_returns_unknown_data_error
-    assert_raises(NameError) { ha.find_enrollment("MADEUP NAME") }
-    assert_raises(NameError) { ha.kindergarten_participation_rate_variation('UNKNOWN 20', against: 'ARIZONA') }
+    assert_raises(UnknownDataError) { ha.find_enrollment("MADEUP NAME") }
+    assert_raises(UnknownDataError) { ha.kindergarten_participation_rate_variation('UNKNOWN 20', against: 'ARIZONA') }
   end
 
   def test_adds_high_school_grad_variation_against_state_performance
