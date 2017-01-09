@@ -48,4 +48,13 @@ class StatewideTest
       @identifier[race][year][subject]
     end
   end
+
+  def proficient_by_race_or_ethnicity(race)
+    races = [:all, :white, :black, :hispanic, :hpi, :asian,
+      :native_american, :two_or_more]
+    if !races.include?(race)
+      raise UnknownRaceError
+    end
+    @identifier[race]
+  end
 end

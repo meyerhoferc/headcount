@@ -126,16 +126,16 @@ class StatewideTestTest < Minitest::Test
   end
 
   def test_proficient_by_race_or_ethnicity_returns_years_and_scores_for_race
-    skip
-    #takes (:race), UnknownRaceError if not in array of races
     expected = { 2011 => {math: 0.816, reading: 0.897, writing: 0.826},
      2012 => {math: 0.818, reading: 0.893, writing: 0.808},
      2013 => {math: 0.805, reading: 0.901, writing: 0.810},
-     2014 => {math: 0.800, reading: 0.855, writing: 0.789},
-    }
-    #verify the hash above--might be incorrect
-    #takes 3 args => 3 digit float or UnknownRaceError
-    assert_raises UnknownRaceError, st.proficient_by_race_or_ethnicity(:purple)
-    assert_equal expected, st.proficient_by_race_or_ethnicity(:asian)
+     2014 => {math: 0.800, reading: 0.855, writing: 0.789}}
+    assert_raises(UnknownRaceError) { st.proficient_by_race_or_ethnicity(:purple) }
+    actual = st.proficient_by_race_or_ethnicity(:asian)
+    expected.each_pair do |year, subjects|
+      subjects.each_pair do |subject, data|
+        assert_in_delta data, actual[year][subject], 0.005
+      end
+    end
   end
 end
