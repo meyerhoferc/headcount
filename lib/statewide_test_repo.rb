@@ -23,18 +23,22 @@ class StatewideTestRepo
     file.each do |row|
       name = row[:location].upcase
       year, tag, data = clean_data(row)
-      # year is year in integer
-      # tag is the symbol for grade or ethnicity
-      # data is the percent in 3 digit float
-      # data tag is key from load_data method
       if @swtests.has_key?(name)
         swtest = @swtests[name]
-        grades_data = { tag => data }
         if [:third_grade, :eighth_grade].include?(data_tag)
-          swtest.identifier[data_tag][year] = grades_data
+          if swtest.identifier[data_tag].has_key?(year)
+            swtest.identifier[data_tag][year][tag] = data
+          else
+            grades_data = { tag => data }
+            swtest.identifier[data_tag][year] = grades_data
+          end
         else
-          ethnicity_data = { data_tag => data }
-          swtest.identifier[tag][year] = ethnicity_data
+          if swtest.identifier[tag].has_key?(year)
+            swtest.identifier[tag][year][data_tag] = data
+          else
+            ethnicity_data = { data_tag => data }
+            swtest.identifier[tag][year] = ethnicity_data
+          end
         end
       else
         swtest = StatewideTest.new({ :name => name,
@@ -47,10 +51,14 @@ class StatewideTestRepo
     end
   end
 
+  def find_by_name(name)
+    @swtests[name.upcase]
+  end
+
   def clean_data(row)
     academic_tags = ["Math", "Reading", "Writing"]
     racial_tags = ["All Students", "Asian", "Black", "Native American",
-      "Two or more", "White", "Hawaiian/Pacific Islander"]
+      "Two or more", "White", "Hawaiian/Pacific Islander", "Hispanic"]
     chosen_header = :score if academic_tags.include?(row.to_s.split(",")[1])
     chosen_header = :race_ethnicity if racial_tags.include?(row.to_s.split(",")[1])
     year = clean_year(row[:timeframe])
@@ -64,23 +72,27 @@ class StatewideTestRepo
     return year.join.ljust(4, "0") if year.count < 4
     if year[0] == "0"
       year.shift
-      return year.join.ljust(4, "0")
+      return year.join.ljust(4, "0").to_i
     end
     if year[-1] == "0"
       year.pop
-      return year.join.ljust(4, "0")
+      return year.join.ljust(4, "0").to_i
     end
     year.join.to_i
   end
 
-  def clean_tag(header)
-    header.to_s.downcase.to_sym
+  def clean_tag(tag)
+    return :all if tag.downcase == "all students"
+    return :pacific_islander if tag.downcase == "hawaiian/pacific islander"
+    return :native_american if tag.downcase == "native american"
+    return :two_or_more if tag.downcase == "two or more"
+    tag.downcase.to_sym
   end
 
   def clean_percent(data)
     return 0.0 if data.upcase == "N/A" || data.upcase == "LNE"
     return (data + '.').ljust(7, "0").to_f if data == "0" || data == "1"
     return data.ljust(7, "0").to_f if data.chars.count < 7
-    data.to_s.to_i
+    data.to_s.to_f
   end
 end

@@ -23,6 +23,13 @@ class DataLoadTest < Minitest::Test
     assert load_files(data).values.all? { |object| object.class == CSV }
   end
 
+  def test_can_return_header_converts
+    skip 
+    data = {:statewide_testing => {:math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv"}}
+    load_files(data, :statewide_testing)
+
+  end
+
   def test_can_return_location_for_row
     skip
     rows = [["BRIGGSDALE RE-10",2010,Percent,1], ["BIG SANDY 100J",2010,Percent,1],
