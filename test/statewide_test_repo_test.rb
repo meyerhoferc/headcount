@@ -33,12 +33,18 @@ class StatewideTestRepoTest < Minitest::Test
     names = ['COLORADO', 'ACADEMY 20', 'ADAMS COUNTY 14',
       'ADAMS-ARAPAHOE 28J', 'BIG SANDY 100J']
     assert_equal names.sort, str.swtests.keys.sort
-    # use data load module
-    # look at LNE and N/A and 0 conditionals
   end
 
   def test_can_find_swt_by_name
-    skip
+    skip 
+    str.load_data({
+      :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  }})
     assert_equal 'ACADEMY 20', str.find_by_name('ACADEMY 20').name
     assert_equal StatewideTest, str.find_by_name('ACADEMY 20').class
     assert_equal 'ADAMS COUNTY 14', str.find_by_name('adamS countY 14').name
@@ -50,8 +56,6 @@ class StatewideTestRepoTest < Minitest::Test
     st = str.find_by_name('ACADEMY 20')
     assert_equal 0.857, st.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
   end
-
-
 
   # check out enrollment repo for more test inspiration
 end
