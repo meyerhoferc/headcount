@@ -14,11 +14,6 @@ class StatewideTestRepo
   end
 
   def statewide_test_maker(contents) #takes in hash of data tags & opened files
-    # add_third_grade_data(contents[:third_grade])
-    # add_eighth_grade_data(contents[:eighth_grade])
-    # add_math_data(contents[:math])
-    # add_reading_data(contents[:reading])
-    # add_writing_data(contents[:writing])
     contents.each_pair do |data_tag, file|
       add_data(data_tag, file)
     end
@@ -31,24 +26,23 @@ class StatewideTestRepo
       # year is year in integer
       # tag is the symbol for grade or ethnicity
       # data is the percent in 3 digit float
+      # data tag is key from load_data method
       if @swtests.has_key?(name)
         swtest = @swtests[name]
-        return swtest.identifier[data_tag][year][tag] = data if data_tag == :score
-        swtest.identifier[tag]
+        grades_data = { tag => data }
+        if [:third_grade, :eighth_grade].include?(data_tag)
+          swtest.identifier[data_tag][year] = grades_data
+        else
+          ethnicity_data = { data_tag => data }
+          swtest.identifier[tag][year] = ethnicity_data
+        end
       else
-        # binding.pry
         swtest = StatewideTest.new({ :name => name,
-          :third_grade => { year => { tag => data }}, #format
+          :third_grade => { year => { tag => data }},
           :eighth_grade => {}, :asian => {}, :all => {},
           :pacific_islander => {}, :native_american => {}, :hispanic => {},
           :two_or_more => {}, :white => {}, :black => {} })
-          # do we want a :race_ethnicity symbol to hold the hash of all races?
-          # it should fix the issue on line 36
-
-          # not sure if the hash will work this way, adding the third grade data first
-          # I think it should because third grade is the first file put into the tagged_data hash
         @swtests[name] = swtest
-        puts swtest.name
       end
     end
   end
@@ -89,33 +83,4 @@ class StatewideTestRepo
     return data.ljust(7, "0").to_f if data.chars.count < 7
     data.to_s.to_i
   end
-
-  # def add_third_grade_data(file)
-  #   file.each do |row|
-  #     name = row[:location].upcase
-  #     year, subject, data = third_grade_yearly(row) #clean data
-  #     if @swtests.has_key?(name)
-  #       @swtests[name].identifier[:third_grade][year] = data
-  #     else
-  #       swtest = StatewideTest.new({ :name => name,
-  #         :third_grade => { year[subject] => data }, #format
-  #         :eighth_grade => {}, :asian => {}, :all => {},
-  #         :pacific_islander => {}, :native_american => {}, :hispanic => {},
-  #         :two_or_more => {}, :white => {}, :black => {} })
-  #       @swtests[name] = swtest
-  #     end
-  #   end
-  # end
-  #
-  # def add_eighth_grade_data(file)
-  # end
-  #
-  # def add_math_data(file)
-  # end
-  #
-  # def add_reading_data(file)
-  # end
-  #
-  # def add_writing_data(file)
-  # end
 end
