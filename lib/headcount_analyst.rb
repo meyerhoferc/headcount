@@ -1,4 +1,4 @@
-require 'pry'
+require_relative 'unknown_data_error'
 
 class HeadcountAnalyst
 	attr_reader :dr
@@ -33,13 +33,13 @@ class HeadcountAnalyst
 	end
 
 	def kindergarten_participation_against_high_school_graduation(district_name, comparison = {:against => 'COLORADO'})
-			high_school = high_school_graduation_rate_variation(district_name, :against => 'COLORADO')
-			kindergarten = kindergarten_participation_rate_variation(district_name, :against => 'COLORADO')
-			(kindergarten / high_school).round(3)
+		high_school = high_school_graduation_rate_variation(district_name, :against => 'COLORADO')
+		kindergarten = kindergarten_participation_rate_variation(district_name, :against => 'COLORADO')
+		(kindergarten / high_school).round(3)
 	end
 
 	def find_enrollment(district_name)
-		raise(NameError) if !dr.districts.has_key?(district_name)
+		raise(UnknownDataError) if !dr.districts.has_key?(district_name)
 		dr.er.find_by_name(district_name)
 	end
 
