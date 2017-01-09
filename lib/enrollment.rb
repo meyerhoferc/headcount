@@ -1,5 +1,3 @@
-require 'pry'
-
 class Enrollment
   attr_reader :identifier
   def initialize(identifier)
