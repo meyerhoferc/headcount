@@ -1,4 +1,6 @@
 require_relative 'data_load'
+require 'pry'
+
 class StatewideTestRepo
   include DataLoad
   attr_reader :swtests
@@ -22,7 +24,7 @@ class StatewideTestRepo
     end
   end
 
-  def add_data(tag, file)
+  def add_data(data_tag, file)
     file.each do |row|
       name = row[:location].upcase
       year, tag, data = clean_data(row)
@@ -31,22 +33,23 @@ class StatewideTestRepo
       # data is the percent in 3 digit float
       if @swtests.has_key?(name)
         swtest = @swtests[name]
-        swtest.identifier[tag][year] = data
+        swtest.identifier[data_tag][tag][year] = data
       else
+        # binding.pry
         swtest = StatewideTest.new({ :name => name,
-          :third_grade => { year[subject] => data}, #format
+          :third_grade => { year => { tag => data }}, #format
           :eighth_grade => {}, :asian => {}, :all => {},
           :pacific_islander => {}, :native_american => {}, :hispanic => {},
           :two_or_more => {}, :white => {}, :black => {} })
           # not sure if the hash will work this way, adding the third grade data first
           # I think it should because third grade is the first file put into the tagged_data hash
         @swtests[name] = swtest
+        puts swtest.name
       end
     end
   end
 
   def clean_data(row)
-    # possible_tag_headers = [:score or :race_ethnicity]
     academic_tags = ["Math", "Reading", "Writing"]
     racial_tags = ["All Students", "Asian", "Black", "Native American",
       "Two or more", "White", "Hawaiian/Pacific Islander"]
@@ -56,6 +59,31 @@ class StatewideTestRepo
     tag = clean_tag(row[chosen_header])
     data = clean_percent(row[:data])
     [year, tag, data]
+  end
+
+  def clean_year(year)
+    year = year.chars
+    return year.join.ljust(4, "0") if year.count < 4
+    if year[0] == "0"
+      year.shift
+      return year.join.ljust(4, "0")
+    end
+    if year[-1] == "0"
+      year.pop
+      return year.join.ljust(4, "0")
+    end
+    year.join.to_i
+  end
+
+  def clean_tag(header)
+    header.to_s.downcase.to_sym
+  end
+
+  def clean_percent(data)
+    return 0.0 if data.upcase == "N/A" || data.upcase == "LNE"
+    return (data + '.').ljust(7, "0").to_f if data == "0" || data == "1"
+    return data.ljust(7, "0").to_f if data.chars.count < 7
+    data.to_s.to_i
   end
 
   # def add_third_grade_data(file)
