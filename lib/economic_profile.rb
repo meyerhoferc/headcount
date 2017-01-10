@@ -8,14 +8,14 @@ class EconomicProfile
 
   def median_household_income_in_year(year)
     raise(UnknownDataError) unless check_year_in_any_range(year)
-    find_average_for_year(year)
-    keys = keys.reject { |key| !key.include?(year) }
-    @identifier[:median_household_income][keys.first]
+    ranges = find_ranges_for_year(year)
+    find_salary_in_range(ranges)
+    # @identifier[:median_household_income][keys.first]
   end
 
   def check_year_in_any_range(year)
     years = @identifier[:median_household_income].keys
-    true_or_false = years.map { |range| year >= range[0] && year <= range[1] }
+    true_or_false = years.map { |range| check_year_in_a_range(year, range) }
     true_or_false.any? { |boolean| boolean == true }
   end
 
@@ -32,7 +32,7 @@ class EconomicProfile
 
   def find_salary_in_range(range)
     if range.flatten.count == 2
-      find_average_for_range(range)
+      find_average_for_range(range.flatten)
     else
       salaries = range.map { |range| find_average_for_range(range) }
       find_average(salaries)
@@ -51,5 +51,20 @@ class EconomicProfile
 
   def find_average(data)
     (data.reduce(:+) / data.count).to_i
+  end
+
+  def children_in_poverty(year)
+    raise(UnknownDataError) unless @identifier[:children_in_poverty].has_key?(year)
+    @identifier[:children_in_poverty][year]
+  end
+
+  def free_or_reduced_price_lunch_percentage_in_year(year)
+    raise(UnknownDataError) unless @identifier[:free_or_reduced_price_lunch].has_key?(year)
+    @identifier[:free_or_reduced_price_lunch][year][:percentage]
+  end
+
+  def free_or_reduced_price_lunch_number_in_year(year)
+    raise(UnknownDataError) unless @identifier[:free_or_reduced_price_lunch].has_key?(year)
+    @identifier[:free_or_reduced_price_lunch][year][:total]
   end
 end

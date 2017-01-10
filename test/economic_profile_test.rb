@@ -68,35 +68,27 @@ class EconomicProfileTest < Minitest::Test
   end
 
   def test_returns_average_median_household_income
-    skip
     actual = ep.median_household_income_average
     assert_equal 55000, actual
     assert_equal Fixnum, actual.class
   end
 
   def test_returns_percentage_of_children_in_poverty
-    skip
-    actual_1 = ep.children_in_poverty(2009)
     actual_2 = ep.children_in_poverty(2012)
-    assert_equal Float, actual_1.class
+    assert_raises(UnknownDataError) { ep.children_in_poverty(2009) }
     assert_equal Float, actual_2.class
-    assert_raises(UnknownDataError) { actual_1 }
     assert_equal 0.1845, actual_2
   end
 
   def test_returns_percentage_of_free_reduced_lunch
-    skip
     actual_1 = ep.free_or_reduced_price_lunch_percentage_in_year(2014)
-    actual_2 = ep.free_or_reduced_price_lunch_percentage_in_year(2004)
-    assert_raises(UnknownDataError) { actual_2 }
+    assert_raises(UnknownDataError) { ep.free_or_reduced_price_lunch_percentage_in_year(2004) }
     assert_equal 0.023, actual_1
   end
 
   def test_returns_number_of_free_reduced_lunch
-    skip
     actual_1 = ep.free_or_reduced_price_lunch_number_in_year(2014)
-    actual_2 = ep.free_or_reduced_price_lunch_number_in_year(2088)
-    assert_raises(UnknownDataError) { actual_2 }
+    assert_raises(UnknownDataError) { ep.free_or_reduced_price_lunch_number_in_year(2088) }
     assert_equal 100, actual_1
   end
 end
