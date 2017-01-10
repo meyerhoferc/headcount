@@ -1,5 +1,4 @@
 require_relative 'data_load'
-require 'pry'
 
 class StatewideTestRepo
   include DataLoad
@@ -15,31 +14,16 @@ class StatewideTestRepo
 
   def statewide_test_maker(contents) #takes in hash of data tags & opened files
     contents.each_pair do |data_tag, file|
-      add_data(data_tag, file)
+      create_and_add_swtests(data_tag, file)
     end
   end
 
-  def add_data(data_tag, file)
+  def create_and_add_swtests(data_tag, file)
     file.each do |row|
       name = row[:location].upcase
       year, tag, data = clean_data(row)
       if @swtests.has_key?(name)
-        swtest = @swtests[name]
-        if [:third_grade, :eighth_grade].include?(data_tag)
-          if swtest.identifier[data_tag].has_key?(year)
-            swtest.identifier[data_tag][year][tag] = data
-          else
-            grades_data = { tag => data }
-            swtest.identifier[data_tag][year] = grades_data
-          end
-        else
-          if swtest.identifier[tag].has_key?(year)
-            swtest.identifier[tag][year][data_tag] = data
-          else
-            ethnicity_data = { data_tag => data }
-            swtest.identifier[tag][year] = ethnicity_data
-          end
-        end
+        add_data([year, tag, data, data_tag, name])
       else
         swtest = StatewideTest.new({ :name => name,
           :third_grade => { year => { tag => data }},
@@ -48,6 +32,33 @@ class StatewideTestRepo
           :two_or_more => {}, :white => {}, :black => {} })
         @swtests[name] = swtest
       end
+    end
+  end
+
+  def add_data(all_data)
+    year, tag, data, data_tag, name = all_data
+    if [:third_grade, :eighth_grade].include?(data_tag)
+      add_grade_data(data_tag, year, tag, data, @swtests[name])
+    else
+      add_ethnic_data(data_tag, year, tag, data, @swtests[name])
+    end
+  end
+
+  def add_ethnic_data(data_tag, year, tag, data, swtest)
+    if swtest.identifier[tag].has_key?(year)
+      swtest.identifier[tag][year][data_tag] = data
+    else
+      ethnicity_data = { data_tag => data }
+      swtest.identifier[tag][year] = ethnicity_data
+    end
+  end
+
+  def add_grade_data(data_tag, year, tag, data, swtest)
+    if swtest.identifier[data_tag].has_key?(year)
+      swtest.identifier[data_tag][year][tag] = data
+    else
+      grades_data = { tag => data }
+      swtest.identifier[data_tag][year] = grades_data
     end
   end
 

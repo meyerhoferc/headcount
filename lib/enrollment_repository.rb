@@ -1,7 +1,6 @@
 require 'csv'
 require_relative 'enrollment'
 require_relative 'data_load'
-require 'pry'
 
 class EnrollmentRepository
   include DataLoad

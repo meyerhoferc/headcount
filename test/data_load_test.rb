@@ -1,6 +1,5 @@
 require_relative 'test_helper'
 require './lib/data_load.rb'
-require 'pry'
 
 class DataLoadTest < Minitest::Test
   include DataLoad
@@ -24,7 +23,7 @@ class DataLoadTest < Minitest::Test
   end
 
   def test_can_return_header_converts
-    skip 
+    skip
     data = {:statewide_testing => {:math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv"}}
     load_files(data, :statewide_testing)
 

@@ -19,14 +19,14 @@ class StatewideTestRepoTest < Minitest::Test
     assert str.swtests.empty?
   end
 
-  def test_clean_year_returns_correct_values
+  def test_clean_tag_returns_correct_symbols
     academic_tags = ["Math", "Reading", "Writing"]
     racial_tags = ["All Students", "Asian", "Black", "Native American",
       "Two or more", "White", "Hawaiian/Pacific Islander", "Hispanic"]
     expected_racial = [:all, :asian, :black, :native_american, :two_or_more,
       :white, :pacific_islander, :hispanic]
     expected_academic = [:math, :reading, :writing]
-    
+
     expected_racial.zip(racial_tags).each do |pair|
       assert_equal pair[0], str.clean_tag(pair[1])
     end
@@ -34,11 +34,6 @@ class StatewideTestRepoTest < Minitest::Test
     expected_academic.zip(academic_tags).each do |pair|
       assert_equal pair[0], str.clean_tag(pair[1])
     end
-
-  end
-
-  def test_clean_tag_returns_correct_symbols
-
   end
 
   def test_can_load_data
@@ -86,5 +81,4 @@ class StatewideTestRepoTest < Minitest::Test
     assert_in_delta 0.818,
     st.proficient_for_subject_by_race_in_year(:math, :asian, 2012), 0.005
   end
-  # check out enrollment repo for more test inspiration
 end
