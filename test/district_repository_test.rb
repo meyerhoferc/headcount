@@ -84,7 +84,7 @@ class DistrictRepositoryTest < Minitest::Test
   end
 
   def test_makes_swt_repo_when_loading_its_own_data
-    skip 
+    skip
     dr.load_data({
   :enrollment => {
     :kindergarten => "./data/Kindergartners in full-day program.csv",
