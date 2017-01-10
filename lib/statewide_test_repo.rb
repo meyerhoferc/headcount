@@ -12,7 +12,7 @@ class StatewideTestRepo
     statewide_test_maker(contents)
   end
 
-  def statewide_test_maker(contents) #takes in hash of data tags & opened files
+  def statewide_test_maker(contents)
     contents.each_pair do |data_tag, file|
       create_and_add_swtests(data_tag, file)
     end
@@ -70,12 +70,10 @@ class StatewideTestRepo
     academic_tags = ["Math", "Reading", "Writing"]
     racial_tags = ["All Students", "Asian", "Black", "Native American",
       "Two or more", "White", "Hawaiian/Pacific Islander", "Hispanic"]
-    chosen_header = :score if academic_tags.include?(row.to_s.split(",")[1])
-    chosen_header = :race_ethnicity if racial_tags.include?(row.to_s.split(",")[1])
-    year = clean_year(row[:timeframe])
-    tag = clean_tag(row[chosen_header])
-    data = clean_percent(row[:data])
-    [year, tag, data]
+    header = :score if academic_tags.include?(row.to_s.split(",")[1])
+    header = :race_ethnicity if racial_tags.include?(row.to_s.split(",")[1])
+    [clean_year(row[:timeframe]), clean_tag(row[header]),
+      clean_percent(row[:data])]
   end
 
   def clean_year(year)

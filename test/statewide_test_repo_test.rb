@@ -77,7 +77,8 @@ class StatewideTestRepoTest < Minitest::Test
     :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
   }})
     st = str.find_by_name('ACADEMY 20')
-    assert_equal 0.857, st.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
+    assert_equal 0.857,
+    st.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
     assert_in_delta 0.818,
     st.proficient_for_subject_by_race_in_year(:math, :asian, 2012), 0.005
   end

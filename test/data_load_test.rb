@@ -43,5 +43,4 @@ class DataLoadTest < Minitest::Test
   def test_can_return_data_for_row
     skip
   end
-
 end
