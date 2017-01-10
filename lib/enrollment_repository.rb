@@ -14,7 +14,6 @@ class EnrollmentRepository
     contents = load_files(data)
     kindergarten = contents[:kindergarten]
     high_school_graduation = contents[:high_school_graduation]
-    #enrollment maker takes more args or maybe the hash or an array
     enrollment_maker(kindergarten, high_school_graduation)
   end
 

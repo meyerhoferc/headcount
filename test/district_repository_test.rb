@@ -9,10 +9,6 @@ class DistrictRepositoryTest < Minitest::Test
     @dr = DistrictRepository.new
   end
 
-  def load
-    @sample_data = CSV.open("kindergarten_sample_data.csv")
-  end
-
   def test_it_a_district_repo
     assert dr
     assert_equal DistrictRepository, dr.class
