@@ -1,7 +1,6 @@
 require_relative 'data_load'
-require 'pry'
 
-class StatewideTestRepo
+class StatewideTestRepository
   include DataLoad
   attr_reader :swtests
   def initialize
@@ -13,33 +12,18 @@ class StatewideTestRepo
     statewide_test_maker(contents)
   end
 
-  def statewide_test_maker(contents) #takes in hash of data tags & opened files
+  def statewide_test_maker(contents)
     contents.each_pair do |data_tag, file|
-      add_data(data_tag, file)
+      create_and_add_swtests(data_tag, file)
     end
   end
 
-  def add_data(data_tag, file)
+  def create_and_add_swtests(data_tag, file)
     file.each do |row|
       name = row[:location].upcase
       year, tag, data = clean_data(row)
       if @swtests.has_key?(name)
-        swtest = @swtests[name]
-        if [:third_grade, :eighth_grade].include?(data_tag)
-          if swtest.identifier[data_tag].has_key?(year)
-            swtest.identifier[data_tag][year][tag] = data
-          else
-            grades_data = { tag => data }
-            swtest.identifier[data_tag][year] = grades_data
-          end
-        else
-          if swtest.identifier[tag].has_key?(year)
-            swtest.identifier[tag][year][data_tag] = data
-          else
-            ethnicity_data = { data_tag => data }
-            swtest.identifier[tag][year] = ethnicity_data
-          end
-        end
+        add_data([year, tag, data, data_tag, name])
       else
         swtest = StatewideTest.new({ :name => name,
           :third_grade => { year => { tag => data }},
@@ -51,6 +35,33 @@ class StatewideTestRepo
     end
   end
 
+  def add_data(all_data)
+    year, tag, data, data_tag, name = all_data
+    if [:third_grade, :eighth_grade].include?(data_tag)
+      add_grade_data(data_tag, year, tag, data, @swtests[name])
+    else
+      add_ethnic_data(data_tag, year, tag, data, @swtests[name])
+    end
+  end
+
+  def add_ethnic_data(data_tag, year, tag, data, swtest)
+    if swtest.identifier[tag].has_key?(year)
+      swtest.identifier[tag][year][data_tag] = data
+    else
+      ethnicity_data = { data_tag => data }
+      swtest.identifier[tag][year] = ethnicity_data
+    end
+  end
+
+  def add_grade_data(data_tag, year, tag, data, swtest)
+    if swtest.identifier[data_tag].has_key?(year)
+      swtest.identifier[data_tag][year][tag] = data
+    else
+      grades_data = { tag => data }
+      swtest.identifier[data_tag][year] = grades_data
+    end
+  end
+
   def find_by_name(name)
     @swtests[name.upcase]
   end
@@ -59,12 +70,10 @@ class StatewideTestRepo
     academic_tags = ["Math", "Reading", "Writing"]
     racial_tags = ["All Students", "Asian", "Black", "Native American",
       "Two or more", "White", "Hawaiian/Pacific Islander", "Hispanic"]
-    chosen_header = :score if academic_tags.include?(row.to_s.split(",")[1])
-    chosen_header = :race_ethnicity if racial_tags.include?(row.to_s.split(",")[1])
-    year = clean_year(row[:timeframe])
-    tag = clean_tag(row[chosen_header])
-    data = clean_percent(row[:data])
-    [year, tag, data]
+    header = :score if academic_tags.include?(row.to_s.split(",")[1])
+    header = :race_ethnicity if racial_tags.include?(row.to_s.split(",")[1])
+    [clean_year(row[:timeframe]), clean_tag(row[header]),
+      clean_percent(row[:data])]
   end
 
   def clean_year(year)
