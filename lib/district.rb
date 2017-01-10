@@ -20,4 +20,9 @@ class District
     current_name = name
     dr.er.find_by_name(current_name)
   end
+
+  def statewide_test
+    dr = repo
+    dr.str.find_by_name(name)
+  end
 end

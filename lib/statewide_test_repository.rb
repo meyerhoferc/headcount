@@ -1,4 +1,5 @@
 require_relative 'data_load'
+require_relative 'statewide_test'
 require 'pry'
 
 class StatewideTestRepository
