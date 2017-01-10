@@ -1,0 +1,2 @@
+class EconomicProfile
+end 
