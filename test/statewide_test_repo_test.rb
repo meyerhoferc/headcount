@@ -84,7 +84,6 @@ class StatewideTestRepoTest < Minitest::Test
   end
 
   def test_can_load_full_data_file
-    skip
     str.load_data({:statewide_testing => {
     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
     :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
