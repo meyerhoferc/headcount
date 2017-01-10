@@ -35,7 +35,7 @@ class EconomicProfileTest < Minitest::Test
       tally = values.count do |value|
         value == value
       end
-      assert_includes([0. 1], tally)
+      assert_includes([0,  1], tally)
     end
     # no idea if this will work, use different enum
   end
