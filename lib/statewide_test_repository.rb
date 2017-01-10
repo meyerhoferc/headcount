@@ -1,4 +1,5 @@
 require_relative 'data_load'
+require 'pry'
 
 class StatewideTestRepository
   include DataLoad
@@ -99,7 +100,8 @@ class StatewideTestRepository
   end
 
   def clean_percent(data)
-    return 0.0 if data.upcase == "N/A" || data.upcase == "LNE" || data.upcase == "#VALUE!"
+    return if data.nil?
+    return data if data.upcase == "N/A" || data.upcase == "LNE" || data.upcase == "#VALUE!"
     return (data + '.').ljust(7, "0").to_f if data == "0" || data == "1"
     return data.ljust(7, "0").to_f if data.chars.count < 7
     data.to_s.to_f
