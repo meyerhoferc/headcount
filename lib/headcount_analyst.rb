@@ -8,10 +8,8 @@ class HeadcountAnalyst
 
 	def find_average(district_name, data_tag)
 		enrollment = find_enrollment(district_name)
-
 		enrollment_data = enrollment.kindergarten_participation_by_year if data_tag == :kindergarten
 		enrollment_data = enrollment.graduation_rate_by_year if data_tag == :high_school_graduation
-
 		enrollment_data = enrollment_data.map { |year, value| value }
 		unless enrollment_data.nil?
 			(enrollment_data.reduce(:+) / enrollment_data.count).round(5)

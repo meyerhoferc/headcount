@@ -1,5 +1,6 @@
 require_relative 'district'
 require_relative 'enrollment_repository'
+require_relative 'statewide_test_repository'
 require 'csv'
 require 'pry'
 class DistrictRepository
@@ -13,6 +14,8 @@ class DistrictRepository
   def load_data(data)
     @er = EnrollmentRepository.new
     @er.load_data(data)
+    # @str = StatewideTestRepository.new
+    # @str.load_data(data)
     contents = load_files(data)
     kindergarten = contents[:kindergarten]
     district_maker(kindergarten)
@@ -31,9 +34,8 @@ class DistrictRepository
   end
 
   def find_all_matching(sub_name)
-    matching_districts = {}
-    @districts.each do |name, district|
-      matching_districts[district.name] = district if district.name.start_with?(sub_name.upcase)
+    matching_districts = @districts.reject do |name, district|
+      district if !district.name.start_with?(sub_name.upcase)
     end
     matching_districts.values
   end
