@@ -100,7 +100,7 @@ class StatewideTestRepository
   end
 
   def clean_percent(data)
-    return if data.nil?
+    return 0.0 if data.nil?
     return data if ["N/A", "LNE", "#VALUE!"].include?(data.upcase)
     return (data + '.').ljust(7, "0").to_f if data == "0" || data == "1"
     return data.ljust(7, "0").to_f if data.chars.count < 7
