@@ -19,6 +19,28 @@ class StatewideTestRepoTest < Minitest::Test
     assert str.swtests.empty?
   end
 
+  def test_clean_year_returns_correct_values
+    academic_tags = ["Math", "Reading", "Writing"]
+    racial_tags = ["All Students", "Asian", "Black", "Native American",
+      "Two or more", "White", "Hawaiian/Pacific Islander", "Hispanic"]
+    expected_racial = [:all, :asian, :black, :native_american, :two_or_more,
+      :white, :pacific_islander, :hispanic]
+    expected_academic = [:math, :reading, :writing]
+    
+    expected_racial.zip(racial_tags).each do |pair|
+      assert_equal pair[0], str.clean_tag(pair[1])
+    end
+
+    expected_academic.zip(academic_tags).each do |pair|
+      assert_equal pair[0], str.clean_tag(pair[1])
+    end
+
+  end
+
+  def test_clean_tag_returns_correct_symbols
+
+  end
+
   def test_can_load_data
     assert str.swtests.empty?
     str.load_data({
