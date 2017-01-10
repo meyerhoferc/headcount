@@ -15,6 +15,7 @@ class DistrictRepository
     @er = EnrollmentRepository.new
     @er.load_data(data)
     # @str = StatewideTestRepository.new
+    #need to go through and reject data for str
     # @str.load_data(data)
     contents = load_files(data)
     kindergarten = contents[:kindergarten]
