@@ -9,10 +9,6 @@ class DistrictRepositoryTest < Minitest::Test
     @dr = DistrictRepository.new
   end
 
-  def load
-    @sample_data = CSV.open("kindergarten_sample_data.csv")
-  end
-
   def test_it_a_district_repo
     assert dr
     assert_equal DistrictRepository, dr.class
@@ -85,5 +81,26 @@ class DistrictRepositoryTest < Minitest::Test
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv'}})
     district = dr.find_by_name("ACADEMY 20")
     assert_equal DistrictRepository, district.repo.class
+  end
+
+  def test_makes_swt_repo_when_loading_its_own_data
+    skip
+    dr.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv",
+    :high_school_graduation => "./data/High school graduation rates.csv",
+  },
+  :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+    :reading => "./test/fixtures/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+    :writing => "./test/fixtures/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+  }})
+
+    district = dr.find_by_name('ACADEMY 20')
+    statewide_test = dr.statewide_test_repo.find_by_name('ACADEMY 20')
+    assert_equal 'ACADEMY 20', statewide_test.name
+    assert_equal StatewideTest, statewide_test.class
   end
 end
