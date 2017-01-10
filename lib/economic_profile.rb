@@ -10,7 +10,6 @@ class EconomicProfile
     raise(UnknownDataError) unless check_year_in_any_range(year)
     ranges = find_ranges_for_year(year)
     find_salary_in_range(ranges)
-    # @identifier[:median_household_income][keys.first]
   end
 
   def check_year_in_any_range(year)
