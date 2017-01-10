@@ -25,29 +25,6 @@ class EconomicProfileTest < Minitest::Test
     keys.each { |key| assert ep.identifier.keys.include?(key) }
   end
 
-  def test_has_no_repeats_of_values_inside_of_one_keys_hash
-    skip
-    keys = [:median_household_income, :children_in_poverty,
-      :free_or_reduced_price_lunch, :title_i, :name]
-    keys.each do |key|
-      years = ep.identifier[key]
-
-    end
-  end
-
-  def test_has_no_repeats_of_values_inside_of_one_keys_hash
-    skip
-    keys = [:median_household_income, :children_in_poverty,
-      :free_or_reduced_price_lunch, :title_i, :name]
-    keys.each do |key|
-      values =  ep.identifier[key].values
-      tally = values.count do |value|
-        value == value
-      end
-      assert_includes([0, 1], tally)
-    end
-  end
-
   def test_knows_if_year_is_in_range_of_a_key
     years = [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014]
     years.each { |year| assert ep.check_year_in_any_range(year) }
@@ -65,6 +42,15 @@ class EconomicProfileTest < Minitest::Test
     assert_equal [range_2], ep.find_ranges_for_year(2010)
     assert_equal [range_2], ep.find_ranges_for_year(2014)
     assert_equal [range_1, range_2], ep.find_ranges_for_year(2009)
+  end
+
+  def test_can_find_salary_for_year_range
+    full_range = [[2005, 2009], [2008, 2014]]
+    range_1, range_2 = full_range
+    actual_1, actual_2, actual_3 = [50000, 60000, 55000]
+    assert_equal actual_1, ep.find_salary_in_range(range_1)
+    assert_equal actual_2, ep.find_salary_in_range(range_2)
+    assert_equal actual_3, ep.find_salary_in_range(full_range)
   end
 
   def test_returns_median_household_income

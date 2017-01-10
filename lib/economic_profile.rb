@@ -7,8 +7,8 @@ class EconomicProfile
   end
 
   def median_household_income_in_year(year)
-    keys = @identifier[:median_household_income].keys
     raise(UnknownDataError) unless check_year_in_any_range(year)
+    find_average_for_year(year)
     keys = keys.reject { |key| !key.include?(year) }
     @identifier[:median_household_income][keys.first]
   end
@@ -30,10 +30,23 @@ class EconomicProfile
     end
   end
 
+  def find_salary_in_range(range)
+    if range.flatten.count == 2
+      find_average_for_range(range)
+    else
+      salaries = range.map { |range| find_average_for_range(range) }
+      find_average(salaries)
+    end
+  end
+
   def median_household_income_average
     years = @identifier[:median_household_income].keys.flatten
     incomes = years.map { |year| median_household_income_in_year(year) }
     find_average(incomes)
+  end
+
+  def find_average_for_range(range)
+    @identifier[:median_household_income][range]
   end
 
   def find_average(data)
