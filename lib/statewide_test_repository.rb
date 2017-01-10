@@ -1,6 +1,6 @@
 require_relative 'data_load'
 
-class StatewideTestRepo
+class StatewideTestRepository
   include DataLoad
   attr_reader :swtests
   def initialize

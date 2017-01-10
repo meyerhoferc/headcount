@@ -1,17 +1,17 @@
 require_relative 'test_helper'
 require './lib/statewide_test'
-require './lib/statewide_test_repo'
+require './lib/statewide_test_repository'
 require './lib/data_load'
 
 class StatewideTestRepoTest < Minitest::Test
   include DataLoad
   attr_reader :str
   def setup
-    @str = StatewideTestRepo.new
+    @str = StatewideTestRepository.new
   end
 
   def test_it_is_a_statewide_test_repo
-    assert_equal StatewideTestRepo, str.class
+    assert_equal StatewideTestRepository, str.class
   end
 
   def test_has_collection_of_statewide_test_objects
