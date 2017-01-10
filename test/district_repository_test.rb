@@ -90,16 +90,24 @@ class DistrictRepositoryTest < Minitest::Test
     :high_school_graduation => "./data/High school graduation rates.csv",
   },
   :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
-    :reading => "./test/fixtures/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
-    :writing => "./test/fixtures/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
   }})
+<<<<<<< HEAD
     #
     # district = dr.find_by_name('ACADEMY 20')
     # statewide_test = dr.statewide_test_repo.find_by_name('ACADEMY 20')
     # assert_equal 'ACADEMY 20', statewide_test.name
     # assert_equal StatewideTest, statewide_test.class
+=======
+
+    district = dr.find_by_name('ACADEMY 20')
+    statewide_test = dr.str.find_by_name('ACADEMY 20')
+    assert_equal 'ACADEMY 20', statewide_test.name
+    assert_equal StatewideTest, statewide_test.class
+>>>>>>> 5b63632ec5dabdfe37558c0a3de2ebcb76e09b83
   end
 end

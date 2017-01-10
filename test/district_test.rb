@@ -49,4 +49,24 @@ class DistrictTest < Minitest::Test
     enrollment = district.enrollment
     assert_equal 0.392, district.enrollment.kindergarten_participation_in_year(2007)
   end
+
+  def test_district_can_find_statewide_test_with_same_name
+    dr.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv",
+    :high_school_graduation => "./data/High school graduation rates.csv",
+  },
+  :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  }})
+
+    statewide_test = district.statewide_test
+    assert_equal district.name, statewide_test.name
+    assert_equal StatewideTest, statewide_test.class
+    assert_equal 0.857, statewide_test.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
+  end
 end
