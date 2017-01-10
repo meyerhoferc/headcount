@@ -34,9 +34,8 @@ class DistrictRepository
   end
 
   def find_all_matching(sub_name)
-    matching_districts = {}
-    @districts.each do |name, district|
-      matching_districts[district.name] = district if district.name.start_with?(sub_name.upcase)
+    matching_districts = @districts.reject do |name, district|
+      district if !district.name.start_with?(sub_name.upcase)
     end
     matching_districts.values
   end

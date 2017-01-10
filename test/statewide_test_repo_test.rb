@@ -21,11 +21,11 @@ class StatewideTestRepoTest < Minitest::Test
 
   def test_clean_tag_returns_correct_symbols
     academic_tags = ["Math", "Reading", "Writing"]
+    expected_academic = [:math, :reading, :writing]
     racial_tags = ["All Students", "Asian", "Black", "Native American",
       "Two or more", "White", "Hawaiian/Pacific Islander", "Hispanic"]
     expected_racial = [:all, :asian, :black, :native_american, :two_or_more,
       :white, :pacific_islander, :hispanic]
-    expected_academic = [:math, :reading, :writing]
 
     expected_racial.zip(racial_tags).each do |pair|
       assert_equal pair[0], str.clean_tag(pair[1])
@@ -84,7 +84,7 @@ class StatewideTestRepoTest < Minitest::Test
   end
 
   def test_can_load_full_data_file
-    skip 
+    skip
     str.load_data({:statewide_testing => {
     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
     :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
