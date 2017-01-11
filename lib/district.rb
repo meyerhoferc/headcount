@@ -25,4 +25,9 @@ class District
     dr = repo
     dr.str.find_by_name(name)
   end
+
+  def economic_profile
+    dr = repo
+    dr.epr.find_by_name(name)
+  end
 end

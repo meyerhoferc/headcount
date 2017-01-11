@@ -101,4 +101,29 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal 'ACADEMY 20', statewide_test.name
     assert_equal StatewideTest, statewide_test.class
   end
+
+  def test_makes_ep_repo_when_loading_its_own_data
+    dr.load_data({
+  :enrollment => {
+    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
+    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
+  },
+  :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  },
+  :economic_profile => {
+    :median_household_income => "./test/fixtures/Median_household_income.csv",
+    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
+    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
+    :title_i => "./test/fixtures/Title_I_students.csv"
+  }})
+    district = dr.find_by_name('ACADEMY 20')
+    ep = dr.epr.find_by_name('ACADEMY 20')
+    assert_equal 'ACADEMY 20', ep.name
+    assert_equal EconomicProfile, ep.class
+  end
 end
