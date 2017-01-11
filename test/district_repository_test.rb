@@ -121,7 +121,6 @@ class DistrictRepositoryTest < Minitest::Test
     :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
     :title_i => "./test/fixtures/Title_I_students.csv"
   }})
-  binding.pry
     district = dr.find_by_name('ACADEMY 20')
     ep = dr.epr.find_by_name('ACADEMY 20')
     assert_equal 'ACADEMY 20', ep.name
