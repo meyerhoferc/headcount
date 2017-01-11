@@ -21,20 +21,6 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert er.enrollments.empty?
   end
 
-  def test_clean_occupancy_returns_correct_possible_data
-    given =  ["0", "1", "0.12345", "N/A", "0.123"]
-    result = ["0.00000", "1.00000", "0.12345", "N/A", "0.12300"]
-    matching = given.zip(result)
-    matching.each { |pair| assert_equal pair[1], er.clean_occupancy(pair[0]) }
-  end
-
-  def test_clean_year_returns_sample_data_correctly
-    given = ["200", "2007", "02010", "20120", "2017"]
-    result = ["2000", "2007", "2010", "2012", "2017"]
-    matchers = given.zip(result)
-    matchers.each { |pair| assert_equal pair[1], er.clean_year(pair[0]) }
-  end
-
   def test_sample_data_names_are_in_enrollments_keys
     er.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
       :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
@@ -75,18 +61,6 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal 0.267, enrollment.kindergarten_participation_in_year(2005)
   end
 
-  def test_returns_correctly_formatted_data_for_hs_graduation
-    er_2.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
-      :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
-    row_1 = "ACADEMY 20,2012,Percent,0.88983"
-    row_2 = "ADAMS COUNTY 14,2012,Percent,0.63372"
-    year_1, year_2 = ["2012", "2012"]
-    data_1, data_2 = ["0.88983", "0.63372"]
-    assert_equal "2012", er.clean_year(year_1)
-    assert_equal "2012", er.clean_year(year_2)
-    assert_in_delta 0.889, er.clean_occupancy(data_1).to_f.round(3), 0.005
-    assert_in_delta 0.634, er.clean_occupancy(data_2).to_f.round(3), 0.005
-  end
 
   def test_adds_high_school_grad_data_in_load
     er_2.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',

@@ -2,10 +2,12 @@ require_relative 'district'
 require_relative 'enrollment_repository'
 require_relative 'statewide_test_repository'
 require_relative 'economic_profile_repository'
+require_relative 'data_cleaner'
 require 'csv'
 require 'pry'
 class DistrictRepository
   include DataLoad
+  include DataCleaner
   attr_reader :districts,
               :er,
               :str,
