@@ -102,8 +102,7 @@ class HeadcountAnalyst
 
 	def year_and_percentage(settings, swtest)
 		#needs more checks for setup
-		subject = settings[:subject]
-		grade = settings[:grade]
+		subject, grade = settings[:subject], settings[:grade]
 		all_student_data = swtest.identifier[:all]
 		years_percentages = []
 		all_student_data.each_pair do |year, subject_data|
@@ -128,7 +127,6 @@ class HeadcountAnalyst
 
 	def calculate_all_year_over_year_growths(settings)
 		weighting = settings.has_key?(:weighting)
-		#assuming no weighting for now
 		dr.str.swtests.each_pair do |name, swtest|
 			unless name == 'COLORADO'
 				data = year_and_percentage(settings, swtest)
