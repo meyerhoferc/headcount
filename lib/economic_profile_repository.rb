@@ -123,5 +123,4 @@ class EconomicProfileRepository
     salary = clean_salary(row[:data])
     [range, salary]
   end
-
 end

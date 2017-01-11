@@ -1,6 +1,4 @@
-
 module DataCleaner
-
   def clean_year(year)
     year = year.chars
     return year.join.ljust(4, "0").to_i if year.count < 4
