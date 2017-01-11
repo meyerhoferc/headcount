@@ -36,8 +36,8 @@ class EconomicProfileRepositoryTest < Minitest::Test
     epr.load_data({:economic_profile => {
       :median_household_income => "./test/fixtures/Median_household_income.csv",
       :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-      # :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-      # :title_i => "./test/fixtures/Title_I_students.csv"
+      :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
+      :title_i => "./test/fixtures/Title_I_students.csv"
     }})
   	assert_equal 4, epr.profiles.count
   	names = ['COLORADO', 'ACADEMY 20', 'ADAMS COUNTY 14', 'ADAMS-ARAPAHOE 28J']
@@ -45,7 +45,6 @@ class EconomicProfileRepositoryTest < Minitest::Test
   end
 
   def test_can_grab_ep_by_name
-    skip
     epr.load_data({:economic_profile => {
       :median_household_income => "./test/fixtures/Median_household_income.csv",
       :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",

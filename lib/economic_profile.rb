@@ -6,6 +6,10 @@ class EconomicProfile
     @identifier = identifier
   end
 
+  def name
+    @identifier[:name]
+  end
+
   def median_household_income_in_year(year)
     raise(UnknownDataError) unless check_year_in_any_range(year)
     ranges = find_ranges_for_year(year)

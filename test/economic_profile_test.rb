@@ -25,6 +25,10 @@ class EconomicProfileTest < Minitest::Test
     keys.each { |key| assert ep.identifier.keys.include?(key) }
   end
 
+  def test_it_can_return_name
+    assert_equal 'ACADEMY 20', ep.name
+  end
+
   def test_knows_if_year_is_in_range_of_a_key
     years = [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014]
     years.each { |year| assert ep.check_year_in_any_range(year) }
