@@ -1,0 +1,2 @@
+class InsufficientInformationError < Exception
+end 
