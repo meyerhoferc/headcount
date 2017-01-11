@@ -58,7 +58,6 @@ class EconomicProfileRepositoryTest < Minitest::Test
   end
 
   def test_can_grab_data_from_ep_object
-    skip
     epr.load_data({:economic_profile => {
       :median_household_income => "./test/fixtures/Median_household_income.csv",
       :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
@@ -66,8 +65,8 @@ class EconomicProfileRepositoryTest < Minitest::Test
       :title_i => "./test/fixtures/Title_I_students.csv"
     }})
     ep = epr.find_by_name('ACADEMY 20')
-    assert_equal 50000, ep.median_household_income_in_year(2009)
-    assert_in_delta #value, ep.median_household_income_in_year(2009), 0.005
+    assert_equal 87635, ep.median_household_income_in_year(2009)
+    # assert_in_delta #value, ep.median_household_income_in_year(2009), 0.005
   end
 
   def test_can_load_total_data

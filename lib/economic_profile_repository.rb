@@ -26,8 +26,8 @@ class EconomicProfileRepository
     range, salary = clean_income_data(row)
       if @profiles.has_key?(name)
         profile = @profiles[name]
-        range_salary = { range => salary }
-        profile.identifier[:median_household_income] = range_salary
+        # range_salary = { range => salary }
+        profile.identifier[:median_household_income][range] = salary
       else
         profile = EconomicProfile.new({ :name => name,
           :median_household_income => { range => salary },
