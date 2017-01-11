@@ -16,9 +16,9 @@ class EconomicProfileRepository
   end
 
   def economic_profile_maker(contents)
-  	contents.each_pair do |data_tag, file|
-  		create_and_add_profiles(data_tag, file)
-  	end
+    contents.each_pair do |data_tag, file|
+      create_and_add_profiles(data_tag, file)
+    end
   end
 
   def add_median_household_data(file)
@@ -112,10 +112,10 @@ class EconomicProfileRepository
   end
 
   def create_and_add_profiles(data_tag, file)
-  	add_median_household_data(file) if data_tag == :median_household_income
-  	add_children_in_poverty(file) if data_tag == :children_in_poverty
-  	add_free_or_reduced_priced_lunch(file) if data_tag == :free_or_reduced_price_lunch
-  	add_title_i(file) if data_tag == :title_i
+    add_median_household_data(file) if data_tag == :median_household_income
+    add_children_in_poverty(file) if data_tag == :children_in_poverty
+    add_free_or_reduced_priced_lunch(file) if data_tag == :free_or_reduced_price_lunch
+    add_title_i(file) if data_tag == :title_i
   end
 
   def clean_income_data(row)

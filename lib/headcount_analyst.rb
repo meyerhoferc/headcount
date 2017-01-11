@@ -7,10 +7,6 @@ class HeadcountAnalyst
 		@dr = dr
 		@swtests_year_growth = Hash.new
 	end
-	def 
-
-		
-	end
 
 	def find_average(district_name, data_tag)
 		enrollment = find_enrollment(district_name)
@@ -105,17 +101,18 @@ class HeadcountAnalyst
 	end
 
 	def year_and_percentage(settings, swtest)
-		#needs more checks for setup
-		subject = settings[:subject]
-		grade = settings[:grade]
-		all_student_data = swtest.identifier[:all]
-		years_percentages = []
-		all_student_data.each_pair do |year, subject_data|
-			data = subject_data[subject]
-			years_percentages << [year, data]
-		end
-		years_percentages
+	#needs more checks for setup
+	subject = settings[:subject]
+	grade = settings[:grade]
+	all_student_data = swtest.identifier[:all]
+	years_percentages = []
+	all_student_data.each_pair do |year, subject_data|
+		data = subject_data[subject]
+		years_percentages << [year, data]
 	end
+	years_percentages
+	end
+
 
 	def top_statewide_test_year_over_year_growth(settings)
 		raise(InsufficientInformationError) if settings[:grade].nil?
