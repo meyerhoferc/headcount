@@ -7,6 +7,10 @@ class HeadcountAnalyst
 		@dr = dr
 		@swtests_year_growth = Hash.new
 	end
+	def 
+
+		
+	end
 
 	def find_average(district_name, data_tag)
 		enrollment = find_enrollment(district_name)
