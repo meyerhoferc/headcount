@@ -1,10 +1,11 @@
 require_relative 'unknown_data_error'
-# require_relative 'insufficient_information_error'
+require_relative 'insufficient_information_error'
 
 class HeadcountAnalyst
 	attr_reader :dr
 	def initialize(dr)
 		@dr = dr
+		@swtests_year_growth = Hash.new
 	end
 
 	def find_average(district_name, data_tag)
@@ -99,12 +100,11 @@ class HeadcountAnalyst
 		((latest[1] - earliest[1]) / (latest[0] - earliest[0])).round(3)
 	end
 
-	def year_and_percentage(settings)
+	def year_and_percentage(settings, swtest)
 		#needs more checks for setup
 		subject = settings[:subject]
-		statewide_test = settings[:object]
 		grade = settings[:grade]
-		all_student_data = statewide_test.identifier[:all]
+		all_student_data = swtest.identifier[:all]
 		years_percentages = []
 		all_student_data.each_pair do |year, subject_data|
 			data = subject_data[subject]
@@ -114,12 +114,20 @@ class HeadcountAnalyst
 	end
 
 	def top_statewide_test_year_over_year_growth(settings)
-		# check given a grade or throw the error
-		# check grade is 3 or 8 or unknown data error
-		# checking for weighting, default to evenly 
-		# needs something that iterates statewide test repo @swtests
-		# probably have to exclude Colorado
-		# get data from year_and_percentage
-		# calculate year over year growth
+		raise(InsufficientInformationError) if settings[:grade].nil?
+		raise(UnknownDataError) if ![3, 8].include?(settings[:grade])
+		calculate_all_year_over_year_growths(settings)
+		@swtests_year_growth.sort_by { |name, growth| growth }.reverse.first
+	end
+
+	def calculate_all_year_over_year_growths(settings)
+		weighting = settings.has_key?(:weighting)
+		#assuming no weighting for now
+		dr.str.swtests.each_pair do |name, swtest|
+			unless name == 'COLORADO'
+				data = year_and_percentage(settings, swtest)
+				@swtests_year_growth[name] = year_over_year_growth(data)
+			end
+		end
 	end
 end
