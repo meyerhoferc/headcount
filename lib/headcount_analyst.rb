@@ -1,4 +1,5 @@
 require_relative 'unknown_data_error'
+# require_relative 'insufficient_information_error'
 
 class HeadcountAnalyst
 	attr_reader :dr
@@ -90,5 +91,35 @@ class HeadcountAnalyst
 			ratio <= 1.5 && ratio >= 0.6
 		end
 		number / ratios.count >= 0.7
+	end
+
+	def year_over_year_growth(data)
+		earliest = data[0]
+		latest = data[-1]
+		((latest[1] - earliest[1]) / (latest[0] - earliest[0])).round(3)
+	end
+
+	def year_and_percentage(settings)
+		#needs more checks for setup
+		subject = settings[:subject]
+		statewide_test = settings[:object]
+		grade = settings[:grade]
+		all_student_data = statewide_test.identifier[:all]
+		years_percentages = []
+		all_student_data.each_pair do |year, subject_data|
+			data = subject_data[subject]
+			years_percentages << [year, data]
+		end
+		years_percentages
+	end
+
+	def top_statewide_test_year_over_year_growth(settings)
+		# check given a grade or throw the error
+		# check grade is 3 or 8 or unknown data error
+		# checking for weighting, default to evenly 
+		# needs something that iterates statewide test repo @swtests
+		# probably have to exclude Colorado
+		# get data from year_and_percentage
+		# calculate year over year growth
 	end
 end
