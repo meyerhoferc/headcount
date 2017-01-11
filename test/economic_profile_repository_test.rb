@@ -1,6 +1,6 @@
 require_relative 'test_helper'
-require './lib/statewide_test'
-require './lib/statewide_test_repository'
+require './lib/economic_profile_repository'
+require './lib/economic_profile'
 require './lib/data_load'
 
 class EconomicProfileRepositoryTest < Minitest::Test
@@ -17,6 +17,18 @@ class EconomicProfileRepositoryTest < Minitest::Test
   def test_can_hold_a_collection_of_economic_profile_objects
   	assert_equal Hash, epr.profiles.class
   	assert epr.profiles.empty?
+  end
+
+  def test_can_clean_range_data
+    raw_range = "2005-2009"
+    expected = [2005, 2009]
+    assert_equal expected, epr.clean_range(raw_range)
+    assert_equal Array, epr.clean_range(raw_range).class
+  end
+
+  def test_can_return_clean_salary_data
+    salaries = ["55000", "56298", "89123"]
+    salaries.each { |salary| assert_equal Fixnum, epr.clean_salary(salary).class }
   end
 
   def test_can_load_data
@@ -53,11 +65,11 @@ class EconomicProfileRepositoryTest < Minitest::Test
       :title_i => "./test/fixtures/Title_I_students.csv"
     }})
     ep = epr.find_by_name('ACADEMY 20')
-    assert_equal 50000, ep.median_household_income_in_year(2009)
-    assert_in_delta #value, ep.median_household_income_in_year(2009), 0.005
+    assert_equal 87635, ep.median_household_income_in_year(2009)
   end
 
   def test_can_load_total_data
+    skip 
   	epr.load_data({ :economic_profile => {
     	:median_household_income => "./data/Median household income.csv",
     	:children_in_poverty => "./data/School-aged children in poverty.csv",

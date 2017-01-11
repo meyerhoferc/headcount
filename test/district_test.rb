@@ -69,4 +69,29 @@ class DistrictTest < Minitest::Test
     assert_equal StatewideTest, statewide_test.class
     assert_equal 0.857, statewide_test.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
   end
+
+  def test_district_can_find_economic_profile_with_same_name
+    dr.load_data({
+  :enrollment => {
+    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
+    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
+  },
+  :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  },
+  :economic_profile => {
+    :median_household_income => "./test/fixtures/Median_household_income.csv",
+    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
+    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
+    :title_i => "./test/fixtures/Title_I_students.csv"
+  }})
+
+    ep = district.economic_profile
+    assert_equal district.name, ep.name
+    assert_equal EconomicProfile, ep.class
+  end
 end

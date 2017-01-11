@@ -6,11 +6,14 @@ class EconomicProfile
     @identifier = identifier
   end
 
+  def name
+    @identifier[:name]
+  end
+
   def median_household_income_in_year(year)
     raise(UnknownDataError) unless check_year_in_any_range(year)
     ranges = find_ranges_for_year(year)
     find_salary_in_range(ranges)
-    # @identifier[:median_household_income][keys.first]
   end
 
   def check_year_in_any_range(year)
@@ -53,7 +56,7 @@ class EconomicProfile
     (data.reduce(:+) / data.count).to_i
   end
 
-  def children_in_poverty(year)
+  def children_in_poverty_in_year(year)
     raise(UnknownDataError) unless @identifier[:children_in_poverty].has_key?(year)
     @identifier[:children_in_poverty][year]
   end
@@ -66,5 +69,10 @@ class EconomicProfile
   def free_or_reduced_price_lunch_number_in_year(year)
     raise(UnknownDataError) unless @identifier[:free_or_reduced_price_lunch].has_key?(year)
     @identifier[:free_or_reduced_price_lunch][year][:total]
+  end
+
+  def title_i_in_year(year)
+    raise(UnknownDataError) unless @identifier[:title_i].has_key?(year)
+    @identifier[:title_i][year]
   end
 end
