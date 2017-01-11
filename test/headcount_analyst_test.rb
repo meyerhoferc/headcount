@@ -159,8 +159,31 @@ class HeadcountAnalystTest < Minitest::Test
     assert_raises(UnknownDataError) { ha_3.top_statewide_test_year_over_year_growth(grade: 9, subject: :math) }
     actual = ha_3.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
     assert_equal Array, actual.class
-    binding.pry
     assert_equal String, actual[0].class
     assert_equal Float, actual[1].class
+  end
+
+  def test_can_find_top_set_of_performers
+    dr_4 = DistrictRepository.new
+    dr_4.load_data({
+  :enrollment => {
+    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
+    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
+  },
+  :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  },
+  :economic_profile => {
+    :median_household_income => "./test/fixtures/Median_household_income.csv",
+    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
+    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
+    :title_i => "./test/fixtures/Title_I_students.csv"
+  }})
+    ha_3 = HeadcountAnalyst.new(dr_4)
+    ha_3.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
   end
 end

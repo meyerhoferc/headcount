@@ -117,7 +117,13 @@ class HeadcountAnalyst
 		raise(InsufficientInformationError) if settings[:grade].nil?
 		raise(UnknownDataError) if ![3, 8].include?(settings[:grade])
 		calculate_all_year_over_year_growths(settings)
-		@swtests_year_growth.sort_by { |name, growth| growth }.reverse.first
+		if settings[:top].nil?
+			@swtests_year_growth.sort_by { |name, growth| growth }.reverse.first
+		else
+			count = settings[:top] - 1
+			sorted = @swtests_year_growth.sort_by { |name, growth| growth }.reverse
+			(0..count).to_a.map { |i| sorted[i] }
+		end
 	end
 
 	def calculate_all_year_over_year_growths(settings)
