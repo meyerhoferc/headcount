@@ -1,9 +1,11 @@
 require 'csv'
 require_relative 'enrollment'
 require_relative 'data_load'
+require_relative 'data_cleaner'
 
 class EnrollmentRepository
   include DataLoad
+  include DataCleaner
   attr_reader :enrollments
   def initialize
     @enrollments = Hash.new
@@ -50,32 +52,11 @@ class EnrollmentRepository
   end
 
   def kindergarten_participation_yearly(row)
-    [clean_year(row[:timeframe]).to_i, clean_occupancy(row[:data]).to_f.round(3)]
+    [clean_year(row[:timeframe]).to_i, clean_percent(row[:data])]
   end
 
   def high_school_graduation_yearly(row)
-    [clean_year(row[:timeframe]).to_i, clean_occupancy(row[:data]).to_f.round(3)]
-  end
-
-  def clean_occupancy(data)
-    return data if data.upcase == "N/A"
-    return (data + '.').ljust(7, "0") if data == "0" || data == "1"
-    return data.ljust(7, "0") if data.chars.count < 7
-    data
-  end
-
-  def clean_year(year)
-    year = year.chars
-    return year.join.ljust(4, "0") if year.count < 4
-    if year[0] == "0"
-      year.shift
-      return year.join.ljust(4, "0")
-    end
-    if year[-1] == "0"
-      year.pop
-      return year.join.ljust(4, "0")
-    end
-    year.join
+    [clean_year(row[:timeframe]).to_i, clean_percent(row[:data])]
   end
 
   def find_by_name(name)

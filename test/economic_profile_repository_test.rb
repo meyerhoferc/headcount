@@ -19,18 +19,6 @@ class EconomicProfileRepositoryTest < Minitest::Test
   	assert epr.profiles.empty?
   end
 
-  def test_can_clean_range_data
-    raw_range = "2005-2009"
-    expected = [2005, 2009]
-    assert_equal expected, epr.clean_range(raw_range)
-    assert_equal Array, epr.clean_range(raw_range).class
-  end
-
-  def test_can_return_clean_salary_data
-    salaries = ["55000", "56298", "89123"]
-    salaries.each { |salary| assert_equal Fixnum, epr.clean_salary(salary).class }
-  end
-
   def test_can_load_data
   	assert epr.profiles.empty?
     epr.load_data({:economic_profile => {

@@ -11,6 +11,8 @@ class HeadcountAnalyst
 		enrollment_data = enrollment.kindergarten_participation_by_year if data_tag == :kindergarten
 		enrollment_data = enrollment.graduation_rate_by_year if data_tag == :high_school_graduation
 		enrollment_data = enrollment_data.map { |year, value| value }
+		undesired = ["N/A", "LNE", "#VALUE!"]
+		enrollment_data = enrollment_data.reject { |data| undesired.include?(data) }
 		unless enrollment_data.nil?
 			(enrollment_data.reduce(:+) / enrollment_data.count).round(5)
 		end

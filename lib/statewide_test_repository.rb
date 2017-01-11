@@ -1,9 +1,11 @@
 require_relative 'data_load'
 require_relative 'statewide_test'
+require_relative 'data_cleaner'
 require 'pry'
 
 class StatewideTestRepository
   include DataLoad
+  include DataCleaner
   attr_reader :swtests
   def initialize
     @swtests = Hash.new
@@ -23,7 +25,7 @@ class StatewideTestRepository
   def create_and_add_swtests(data_tag, file)
     file.each do |row|
       name = row[:location].upcase
-      year, tag, data = clean_data(row)
+      year, tag, data = clean_all_data(row)
       if @swtests.has_key?(name)
         add_data([year, tag, data, data_tag, name])
       else
@@ -68,7 +70,7 @@ class StatewideTestRepository
     @swtests[name.upcase]
   end
 
-  def clean_data(row)
+  def clean_all_data(row)
     academic_tags = ["Math", "Reading", "Writing"]
     racial_tags = ["All Students", "Asian", "Black", "Native American",
       "Two or more", "White", "Hawaiian/Pacific Islander", "Hispanic"]
@@ -78,33 +80,11 @@ class StatewideTestRepository
       clean_percent(row[:data])]
   end
 
-  def clean_year(year)
-    year = year.chars
-    return year.join.ljust(4, "0") if year.count < 4
-    if year[0] == "0"
-      year.shift
-      return year.join.ljust(4, "0").to_i
-    end
-    if year[-1] == "0"
-      year.pop
-      return year.join.ljust(4, "0").to_i
-    end
-    year.join.to_i
-  end
-
   def clean_tag(tag)
     return :all if tag.downcase == "all students"
     return :pacific_islander if tag.downcase == "hawaiian/pacific islander"
     return :native_american if tag.downcase == "native american"
     return :two_or_more if tag.downcase == "two or more"
     tag.downcase.to_sym
-  end
-
-  def clean_percent(data)
-    return 0.0 if data.nil?
-    return data if ["N/A", "LNE", "#VALUE!"].include?(data.upcase)
-    return (data + '.').ljust(7, "0").to_f if data == "0" || data == "1"
-    return data.ljust(7, "0").to_f if data.chars.count < 7
-    data.to_s.to_f
   end
 end
