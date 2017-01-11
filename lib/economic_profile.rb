@@ -57,17 +57,23 @@ class EconomicProfile
   end
 
   def children_in_poverty_in_year(year)
-    raise(UnknownDataError) unless @identifier[:children_in_poverty].has_key?(year)
+    unless @identifier[:children_in_poverty].has_key?(year)
+      raise(UnknownDataError)
+    end
     @identifier[:children_in_poverty][year]
   end
 
   def free_or_reduced_price_lunch_percentage_in_year(year)
-    raise(UnknownDataError) unless @identifier[:free_or_reduced_price_lunch].has_key?(year)
+    unless @identifier[:free_or_reduced_price_lunch].has_key?(year)
+      raise(UnknownDataError)
+    end
     @identifier[:free_or_reduced_price_lunch][year][:percentage]
   end
 
   def free_or_reduced_price_lunch_number_in_year(year)
-    raise(UnknownDataError) unless @identifier[:free_or_reduced_price_lunch].has_key?(year)
+    unless @identifier[:free_or_reduced_price_lunch].has_key?(year)
+      raise(UnknownDataError) 
+    end
     @identifier[:free_or_reduced_price_lunch][year][:total]
   end
 
