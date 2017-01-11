@@ -78,8 +78,8 @@ class EconomicProfileTest < Minitest::Test
   end
 
   def test_returns_percentage_of_children_in_poverty
-    actual_2 = ep.children_in_poverty(2012)
-    assert_raises(UnknownDataError) { ep.children_in_poverty(2009) }
+    actual_2 = ep.children_in_poverty_in_year(2012)
+    assert_raises(UnknownDataError) { ep.children_in_poverty_in_year(2009) }
     assert_equal Float, actual_2.class
     assert_equal 0.1845, actual_2
   end
@@ -94,5 +94,10 @@ class EconomicProfileTest < Minitest::Test
     actual_1 = ep.free_or_reduced_price_lunch_number_in_year(2014)
     assert_raises(UnknownDataError) { ep.free_or_reduced_price_lunch_number_in_year(2088) }
     assert_equal 100, actual_1
+  end
+
+  def test_returns_data_for_return_title_i_in_year
+    assert_equal 0.543, ep.title_i_in_year(2015)
+    assert_raises(UnknownDataError) { ep.title_i_in_year(2000) }
   end
 end

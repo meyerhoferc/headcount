@@ -1,6 +1,5 @@
 require_relative 'data_load'
 require_relative 'economic_profile'
-require 'pry'
 
 class EconomicProfileRepository
   include DataLoad
@@ -87,7 +86,6 @@ class EconomicProfileRepository
   end
 
   def clean_lunch_data(row)
-    # return if !desired_row(row)
     return [clean_year(row[:timeframe]), clean_percent(row[:data])] if row[:dataformat].to_s.downcase == 'percent'
     [clean_year(row[:timeframe]), clean_salary(row[:data])] if row[:dataformat].to_s.downcase == 'number'
   end
