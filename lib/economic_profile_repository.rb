@@ -42,14 +42,14 @@ class EconomicProfileRepository
   def add_free_or_reduced_priced_lunch(file)
     file.each do |row|
       next if !desired_row(row)
-       name = row[:location].upcase
-       year, data = clean_lunch_data(row)
-       profile = @profiles[name]
-       if row[:dataformat].to_s.downcase == 'percent'
-         add_percentage_to_free_reduced_lunch(year, data, profile)
-       else
-         add_total_data_to_free_reduced_lunch(year, data, profile)
-       end
+      name = row[:location].upcase
+      year, data = clean_lunch_data(row)
+      profile = @profiles[name]
+      if row[:dataformat].to_s.downcase == 'percent'
+        add_percentage_to_free_reduced_lunch(year, data, profile)
+      else
+        add_total_data_to_free_reduced_lunch(year, data, profile)
+      end
     end
   end
 

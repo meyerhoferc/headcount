@@ -4,8 +4,8 @@ require_relative 'insufficient_information_error'
 class HeadcountAnalyst
   attr_reader :dr
   def initialize(dr)
-  @dr = dr
-  @swtests_year_growth = Hash.new
+    @dr = dr
+    @swtests_year_growth = Hash.new
   end
 
   def find_average(district_name, data_tag)
@@ -113,7 +113,6 @@ class HeadcountAnalyst
   years_percentages
   end
 
-
   def top_statewide_test_year_over_year_growth(settings)
     raise(InsufficientInformationError) if settings[:grade].nil?
     raise(UnknownDataError) if ![3, 8].include?(settings[:grade])
@@ -137,4 +136,3 @@ class HeadcountAnalyst
       end
     end
   end
-end
