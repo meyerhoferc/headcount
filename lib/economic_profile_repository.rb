@@ -25,7 +25,6 @@ class EconomicProfileRepository
     range, salary = clean_income_data(row)
       if @profiles.has_key?(name)
         profile = @profiles[name]
-        # range_salary = { range => salary }
         profile.identifier[:median_household_income][range] = salary
       else
         profile = EconomicProfile.new({ :name => name,
@@ -45,20 +44,28 @@ class EconomicProfileRepository
        year, data = clean_lunch_data(row)
        profile = @profiles[name]
        if row[:dataformat].to_s.downcase == 'percent'
-         if profile.identifier[:free_or_reduced_price_lunch].has_key?(year)
-           profile.identifier[:free_or_reduced_price_lunch][year][:percentage] = data
-         else
-           percentage_data = { :percentage => data }
-           profile.identifier[:free_or_reduced_price_lunch][year] = percentage_data
-         end
+         add_percentage_to_free_reduced_lunch(year, data, profile)
        else
-         if profile.identifier[:free_or_reduced_price_lunch].has_key?(year)
-           profile.identifier[:free_or_reduced_price_lunch][year][:total] = data
-         else
-           total_students = { :total => data }
-           profile.identifier[:free_or_reduced_price_lunch][year] = total_students
-         end
+         add_total_data_to_free_reduced_lunch(year, data, profile)
        end
+    end
+  end
+
+  def add_percentage_to_free_reduced_lunch(year, data, profile)
+    if profile.identifier[:free_or_reduced_price_lunch].has_key?(year)
+      profile.identifier[:free_or_reduced_price_lunch][year][:percentage] = data
+    else
+      percentage_data = { :percentage => data }
+      profile.identifier[:free_or_reduced_price_lunch][year] = percentage_data
+    end
+  end
+
+  def add_total_data_to_free_reduced_lunch(year, data, profile)
+    if profile.identifier[:free_or_reduced_price_lunch].has_key?(year)
+      profile.identifier[:free_or_reduced_price_lunch][year][:total] = data
+    else
+      total_students = { :total => data }
+      profile.identifier[:free_or_reduced_price_lunch][year] = total_students
     end
   end
 

@@ -1,7 +1,7 @@
 require_relative 'test_helper'
 require './lib/unknown_data_error'
 
-class UnknownRaceErrorTest < Minitest::Test
+class UnknownDataErrorTest < Minitest::Test
   def testing_error(value)
     if value
       value
