@@ -5,9 +5,18 @@ require './lib/data_load'
 
 class StatewideTestRepoTest < Minitest::Test
   include DataLoad
-  attr_reader :str
+  attr_reader :str,
+              :data
   def setup
     @str = StatewideTestRepository.new
+    @data = {
+      :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  }}
   end
 
   def test_it_is_a_statewide_test_repo
@@ -38,14 +47,7 @@ class StatewideTestRepoTest < Minitest::Test
 
   def test_can_load_data
     assert str.swtests.empty?
-    str.load_data({
-      :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  }})
+    str.load_data(data)
     assert_equal 5, str.swtests.count
     names = ['COLORADO', 'ACADEMY 20', 'ADAMS COUNTY 14',
       'ADAMS-ARAPAHOE 28J', 'BIG SANDY 100J']
@@ -53,14 +55,7 @@ class StatewideTestRepoTest < Minitest::Test
   end
 
   def test_can_find_swt_by_name
-    str.load_data({
-      :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  }})
+    str.load_data(data)
     assert_equal 'ACADEMY 20', str.find_by_name('ACADEMY 20').name
     assert_equal StatewideTest, str.find_by_name('ACADEMY 20').class
     assert_equal 'ADAMS COUNTY 14', str.find_by_name('adamS countY 14').name
@@ -68,27 +63,10 @@ class StatewideTestRepoTest < Minitest::Test
   end
 
   def test_can_get_data_from_swt_object
-    str.load_data({
-      :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  }})
+    str.load_data(data)
     st = str.find_by_name('ACADEMY 20')
     assert_equal 0.857, st.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
     assert_in_delta 0.818,
     st.proficient_for_subject_by_race_in_year(:math, :asian, 2012), 0.005
-  end
-
-  def test_can_load_full_data_file
-    str.load_data({:statewide_testing => {
-    :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
-    :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
-    :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
-    :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
-    :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
-  }})
   end
 end

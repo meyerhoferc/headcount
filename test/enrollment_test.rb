@@ -58,6 +58,4 @@ class EnrollmentTest < Minitest::Test
     assert_equal Float, result_1.class
     assert_equal Float, result_2.class
   end
-
-
 end

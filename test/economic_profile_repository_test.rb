@@ -5,9 +5,16 @@ require './lib/data_load'
 
 class EconomicProfileRepositoryTest < Minitest::Test
   include DataLoad
-  attr_reader :epr
+  attr_reader :epr,
+              :data
   def setup
     @epr = EconomicProfileRepository.new
+    @data = {:economic_profile => {
+      :median_household_income => "./test/fixtures/Median_household_income.csv",
+      :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
+      :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
+      :title_i => "./test/fixtures/Title_I_students.csv"
+    }}
   end
 
   def test_it_is_an_economic_profile_repo
@@ -21,24 +28,14 @@ class EconomicProfileRepositoryTest < Minitest::Test
 
   def test_can_load_data
   	assert epr.profiles.empty?
-    epr.load_data({:economic_profile => {
-      :median_household_income => "./test/fixtures/Median_household_income.csv",
-      :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-      :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-      :title_i => "./test/fixtures/Title_I_students.csv"
-    }})
+    epr.load_data(data)
   	assert_equal 4, epr.profiles.count
   	names = ['COLORADO', 'ACADEMY 20', 'ADAMS COUNTY 14', 'ADAMS-ARAPAHOE 28J']
   	assert_equal names.sort, epr.profiles.keys.sort
   end
 
   def test_can_grab_ep_by_name
-    epr.load_data({:economic_profile => {
-      :median_household_income => "./test/fixtures/Median_household_income.csv",
-      :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-      :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-      :title_i => "./test/fixtures/Title_I_students.csv"
-    }})
+    epr.load_data(data)
     assert_equal 'ACADEMY 20', epr.find_by_name('ACADEMY 20').name
     assert_equal EconomicProfile, epr.find_by_name('ACADEMY 20').class
     assert_equal 'ADAMS COUNTY 14', epr.find_by_name('aDaMs coUntY 14').name
@@ -46,12 +43,7 @@ class EconomicProfileRepositoryTest < Minitest::Test
   end
 
   def test_can_grab_data_from_ep_object
-    epr.load_data({:economic_profile => {
-      :median_household_income => "./test/fixtures/Median_household_income.csv",
-      :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-      :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-      :title_i => "./test/fixtures/Title_I_students.csv"
-    }})
+    epr.load_data(data)
     ep = epr.find_by_name('ACADEMY 20')
     assert_equal 87635, ep.median_household_income_in_year(2009)
   end
