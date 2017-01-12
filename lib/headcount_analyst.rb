@@ -108,11 +108,11 @@ class HeadcountAnalyst
   end
 
   def year_over_year_growth(data)
-		undesired = ["N/A", "LNE", "#VALUE!", nil, Float::NAN]
+		undesired = ["N/A", "LNE", "#VALUE!", nil, Float::NAN, 0]
     clean_data = data.reject { |data| undesired.include?(data[1]) }
 		clean_data = clean_data.reject { |data| data[1].class != Float }
 		if clean_data.empty?
-			0.0
+			0
 		else
 			earliest = clean_data[0]
 			latest = clean_data[-1]
@@ -181,6 +181,9 @@ class HeadcountAnalyst
 	end
 
 	def weighted_percentages(percentages, weighting)
+		if percentages.count != 3
+			return 0
+		end
 		weighted_percentages = percentages.map do |percent|
 			weight = weighting[:math] if percent == percentages[0]
 			weight = weighting[:reading] if percent == percentages[1]
