@@ -108,38 +108,24 @@ class HeadcountAnalyst
   end
 
   def year_over_year_growth(data)
-		undesired = ["N/A", "LNE", "#VALUE!", nil, Float::NAN]
-    clean_data = data.reject { |data| undesired.include?(data[1]) }
-		clean_data = clean_data.reject { |data| data[1].class != Float }
-		clean_data = clean_data.reject { |data| data[0].class != Fixnum }
-		clean_data = clean_data.reject { |data| data[1].nan? }
-		# clean_data = clean_data.map do |data|
-		# 	data.reject!(&:nan?)
-		# end
-		clean_data.each do |pair|
-			if pair == nil || pair == false
-
-				binding.pry
-			end
-		end
-		if clean_data.empty?
-			0
-		else
-			earliest = clean_data[0]
-			latest = clean_data[-1]
-			if earliest.nil? || latest.nil?
-				binding.pry
-			end
-			((latest[1] - earliest[1]) / (latest[0] - earliest[0])).round(3)
-		end
+		clean_data = clean_year_and_percentage_data(data)
+		return 0 if clean_data.empty?
+		earliest = clean_data[0]
+		latest = clean_data[-1]
+		return if earliest == latest
+		((latest[1] - earliest[1]) / (latest[0] - earliest[0])).round(3)
   end
 
-  def year_and_percentage(settings, swtest)
-    subject = settings[:subject] if !settings[:subject].nil?
-		subjects = [:math, :reading, :writing] if settings[:subject].nil?
-		grade = :third_grade if settings[:grade] == 3
-		grade = :eighth_grade if settings[:grade] == 8
+	def clean_year_and_percentage_data(data)
+		undesired = ["N/A", "LNE", "#VALUE!", nil, Float::NAN]
+    clean_data = data.reject { |data| undesired.include?(data[1]) }
+		clean_data = clean_data.reject { |data| data[0].class != Fixnum }
+		clean_data = clean_data.reject { |data| data[1].nan? unless data[1] == 0 }
+	end
 
+  def year_and_percentage(settings, swtest)
+		subjects = [:math, :reading, :writing] if settings[:subject].nil?
+		subject, grade = current_settings(settings)
     all_student_data = swtest.identifier[grade]
     years_percentages = []
     all_student_data.each_pair do |year, subject_data|
@@ -151,6 +137,13 @@ class HeadcountAnalyst
 		end
 		years_percentages
   end
+
+	def current_settings(settings)
+		subject = settings[:subject] if !settings[:subject].nil?
+		grade = :third_grade if settings[:grade] == 3
+		grade = :eighth_grade if settings[:grade] == 8
+		[subject, grade]
+	end
 
   def top_statewide_test_year_over_year_growth(settings)
     raise(InsufficientInformationError) if settings[:grade].nil?
@@ -166,7 +159,6 @@ class HeadcountAnalyst
   end
 
   def calculate_all_year_over_year_growths(settings)
-    #assuming no weighting for now
 		swtests = dr.str.swtests
     swtests.each_pair do |name, swtest|
       unless name == 'COLORADO'
@@ -199,18 +191,14 @@ class HeadcountAnalyst
 
 	def weighted_percentages(percentages, weighting)
 		percentages = percentages.reject do |data|
-			data.nan? unless data == 0
-		end 
-		if percentages.count != 3
-			return 0
+			data.nan? unless data == 0 || data.nil?
+			data.nil?
 		end
+		return 0 if percentages.count != 3
 		weighted_percentages = percentages.map do |percent|
 			weight = weighting[:math] if percent == percentages[0]
 			weight = weighting[:reading] if percent == percentages[1]
 			weight = weighting[:writing] if percent == percentages[2]
-			if weight.nil? || percent.nil?
-				binding.pry
-			end
 			3 * weight * percent
 		end
 		weighted_percentages.reduce(:+)/weighted_percentages.count

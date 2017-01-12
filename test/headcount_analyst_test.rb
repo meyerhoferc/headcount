@@ -231,11 +231,10 @@ class HeadcountAnalystTest < Minitest::Test
     assert_equal 4, ha_3.swtests_year_growth.count
   end
 
-  # def test_can_find_earliest_and_latest_for_corrupted_data
-  #   data = [[2008, "N/A"], [2009, 0.752], [2010, "LNE"], [2011, 0.993]]
-  #   undesired = ["N/A", "LNE", "#VALUE!"]
-  #   clean_data = data.reject { |data| undesired.include?(data[1]) }
-  #   binding.pry
-  #   puts clean_data
-  # end
+  def test_can_clean_data
+    data = [[2014, "N/A"], [2008, nil], [2005, 0.531], [2006, 0], [2007, Float::NAN]]
+    undesired = ["N/A", "LNE", "#VALUE!", nil, Float::NAN]
+    result = [[2005, 0.531], [2006, 0]]
+    assert_equal result, ha.clean_year_and_percentage_data(data)
+  end
 end
