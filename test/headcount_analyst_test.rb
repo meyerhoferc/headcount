@@ -4,6 +4,7 @@ require './lib/district'
 require './lib/enrollment_repository'
 require './lib/district_repository'
 require './lib/headcount_analyst'
+require './lib/statewide_test'
 
 class HeadcountAnalystTest < Minitest::Test
   attr_reader :dr,
@@ -107,6 +108,12 @@ class HeadcountAnalystTest < Minitest::Test
     assert_equal expected, actual
   end
 
+  def test_can_calculate_year_over_year_growth_for_mixed_data
+    data = [[2008, "N/A"], [2009, 0.752], [2010, "LNE"], [2011, 0.993]]
+    actual = 0.121
+    assert_equal actual, ha.year_over_year_growth(data)
+  end
+
   def test_can_return_nested_array_of_year_and_data_for_statewide_test
     dr_3 = DistrictRepository.new
     dr_3.load_data({
@@ -128,7 +135,7 @@ class HeadcountAnalystTest < Minitest::Test
     :title_i => "./test/fixtures/Title_I_students.csv"
   }})
     statewide_test = dr_3.str.find_by_name('ACADEMY 20')
-    data = ha.year_and_percentage({:subject => :math, :grade => :all}, statewide_test)
+    data = ha.year_and_percentage({:subject => :math, :grade => 3}, statewide_test)
     assert_equal Array, data.class
     assert_equal Fixnum, data[0][0].class
     assert_equal Float, data[0][1].class
@@ -184,6 +191,9 @@ class HeadcountAnalystTest < Minitest::Test
     :title_i => "./test/fixtures/Title_I_students.csv"
   }})
     ha_3 = HeadcountAnalyst.new(dr_4)
-    ha_3.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
+    actual = ha_3.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
+    assert_equal 3, actual.count
+    assert_equal String, actual[0][0].class
+    assert_equal Float, actual[0][1].class
   end
 end

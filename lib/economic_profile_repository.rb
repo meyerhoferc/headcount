@@ -39,7 +39,7 @@ class EconomicProfileRepository
      end
   end
 
-  def add_free_or_reduced_priced_lunch(file)
+  def add_free_reduced_lunch(file)
     file.each do |row|
       next if !desired_row(row)
       name = row[:location].upcase
@@ -95,16 +95,22 @@ class EconomicProfileRepository
   end
 
   def clean_lunch_data(row)
-    return [clean_year(row[:timeframe]), clean_percent(row[:data])] if row[:dataformat].to_s.downcase == 'percent'
-    [clean_year(row[:timeframe]), clean_salary(row[:data])] if row[:dataformat].to_s.downcase == 'number'
+    if row[:dataformat].to_s.downcase == 'percent'
+      return [clean_year(row[:timeframe]), clean_percent(row[:data])]
+    end
+    if row[:dataformat].to_s.downcase == 'number'
+      [clean_year(row[:timeframe]), clean_salary(row[:data])]
+    end
   end
 
   def desired_row(row)
     row_has_number = row[:dataformat].to_s.downcase == 'number'
-    row_has_correct_number = row[:poverty_level].to_s.downcase == 'eligible for free or reduced lunch'
-    row_has_percentage = row[:dataformat].to_s.downcase == 'percent'
-    row_has_correct_percentage = row[:poverty_level].to_s.downcase == 'eligible for free or reduced lunch'
-    (row_has_number && row_has_correct_number) || (row_has_percentage && row_has_correct_percentage)
+    number_phrase = 'eligible for free or reduced lunch'
+    correct_number = row[:poverty_level].to_s.downcase == number_phrase
+    row_percent = row[:dataformat].to_s.downcase == 'percent'
+    percent_phrase = 'eligible for free or reduced lunch'
+    correct_percentage = row[:poverty_level].to_s.downcase == percent_phrase
+    (row_has_number && correct_number) || (row_percent && correct_percentage)
   end
 
   def find_by_name(name)
@@ -114,7 +120,7 @@ class EconomicProfileRepository
   def create_and_add_profiles(data_tag, file)
     add_median_household_data(file) if data_tag == :median_household_income
     add_children_in_poverty(file) if data_tag == :children_in_poverty
-    add_free_or_reduced_priced_lunch(file) if data_tag == :free_or_reduced_price_lunch
+    add_free_reduced_lunch(file) if data_tag == :free_or_reduced_price_lunch
     add_title_i(file) if data_tag == :title_i
   end
 

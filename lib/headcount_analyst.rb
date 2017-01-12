@@ -2,9 +2,11 @@ require_relative 'unknown_data_error'
 require_relative 'insufficient_information_error'
 
 class HeadcountAnalyst
-  attr_reader :dr
+  attr_reader :dr,
+							:clean_swtests
   def initialize(dr)
     @dr = dr
+		@clean_swtests = Hash.new
     @swtests_year_growth = Hash.new
   end
 
@@ -95,22 +97,26 @@ class HeadcountAnalyst
   end
 
   def year_over_year_growth(data)
-    earliest = data[0]
-    latest = data[-1]
+		undesired = ["N/A", "LNE", "#VALUE!"]
+    clean_data = data.reject { |data| undesired.include?(data[1]) }
+    earliest = clean_data[0]
+    latest = clean_data[-1]
     ((latest[1] - earliest[1]) / (latest[0] - earliest[0])).round(3)
   end
 
   def year_and_percentage(settings, swtest)
-  #needs more checks for setup
-  subject = settings[:subject]
-  grade = settings[:grade]
-  all_student_data = swtest.identifier[:all]
-  years_percentages = []
-  all_student_data.each_pair do |year, subject_data|
-    data = subject_data[subject]
-    years_percentages << [year, data]
-  end
-  years_percentages
+    subject = settings[:subject] if !settings[:subject].nil?
+		subjects = [:math, :reading, :writing] if settings[:subject].nil?
+		grade = :third_grade if settings[:grade] == 3
+		grade = :eighth_grade if settings[:grade] == 8
+
+    all_student_data = swtest.identifier[grade]
+    years_percentages = []
+    all_student_data.each_pair do |year, subject_data|
+			data = subject_data[subject]
+			years_percentages << [year, data]
+		end
+		years_percentages
   end
 
   def top_statewide_test_year_over_year_growth(settings)
@@ -118,7 +124,7 @@ class HeadcountAnalyst
     raise(UnknownDataError) if ![3, 8].include?(settings[:grade])
     calculate_all_year_over_year_growths(settings)
     if settings[:top].nil?
-    @swtests_year_growth.sort_by { |name, growth| growth }.reverse.first
+			@swtests_year_growth.sort_by { |name, growth| growth }.reverse.first
     else
       count = settings[:top] - 1
       sorted = @swtests_year_growth.sort_by { |name, growth| growth }.reverse
@@ -127,12 +133,13 @@ class HeadcountAnalyst
   end
 
   def calculate_all_year_over_year_growths(settings)
-    weighting = settings.has_key?(:weighting)
     #assuming no weighting for now
-    dr.str.swtests.each_pair do |name, swtest|
+		swtests = dr.str.swtests
+    swtests.each_pair do |name, swtest|
       unless name == 'COLORADO'
         data = year_and_percentage(settings, swtest)
         @swtests_year_growth[name] = year_over_year_growth(data)
-      end
+			end
     end
   end
+end
