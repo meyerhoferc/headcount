@@ -21,9 +21,10 @@ module DataCleaner
   end
 
   def clean_percent(data)
-    return 0.0 if data.nil?
+    return 0 if data.nil?
     return data if ["N/A", "LNE", "#VALUE!"].include?(data.upcase)
-    return (data + '.').ljust(7, "0").to_f if data == "0" || data == "1"
+    return (data + '.').ljust(7, "0").to_f if data == "1"
+    return 0 if data == "0"
     return data.ljust(7, "0").to_f if data.chars.count < 7
     data.to_s.to_f.round(3)
   end
