@@ -150,9 +150,11 @@ class HeadcountAnalyst
     raise(UnknownDataError) if ![3, 8].include?(settings[:grade])
     calculate_all_year_over_year_growths(settings)
     if settings[:top].nil?
+      @swtests_year_growth.delete_if { |name, growth| growth.nil? }
       @swtests_year_growth.sort_by { |name, growth| growth }.reverse.first
     else
       count = settings[:top] - 1
+      @swtests_year_growth.delete_if { |name, growth| growth.nil? }
       sorted = @swtests_year_growth.sort_by { |name, growth| growth }.reverse
       (0..count).to_a.map { |i| sorted[i] }
     end
