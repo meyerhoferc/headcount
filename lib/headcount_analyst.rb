@@ -67,7 +67,7 @@ class HeadcountAnalyst
       ratio = (value / enrollment_data_2[year]).round(3)
       result[year] = ratio
     end
-  result.sort.to_h
+    result.sort.to_h
   end
 
   def kindergarten_participation_correlates_with_high_school_graduation(setting)
@@ -173,11 +173,7 @@ class HeadcountAnalyst
   end
 
 	def all_subjects(swtest, settings)
-		weighting = { :math => 1, :reading => 1, :writing => 1} if settings[:weighting].nil?
-		if !settings[:weighting].nil?
-			raise(UnknownDataError) if settings[:weighting].values.reduce(:+) != 1
-			weighting = settings[:weighting]
-		end
+		weighting = determine_weight_settings(settings)
 		subjects = [:math, :reading, :writing]
 		percentages = []
 		subjects.each do |subject|
@@ -186,6 +182,15 @@ class HeadcountAnalyst
 			percentages << year_over_year_growth(data)
 			weighted_percentage = weighted_percentages(percentages, weighting)
 			@swtests_year_growth[swtest.name] = weighted_percentage
+		end
+	end
+
+	def determine_weight_settings(settings)
+		if settings[:weighting].nil?
+			weighting = { :math => 1, :reading => 1, :writing => 1}
+		else
+			raise(UnknownDataError) if settings[:weighting].values.reduce(:+) != 1
+			weighting = settings[:weighting]
 		end
 	end
 
