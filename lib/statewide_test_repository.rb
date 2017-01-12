@@ -1,7 +1,6 @@
 require_relative 'data_load'
 require_relative 'statewide_test'
 require_relative 'data_cleaner'
-require 'pry'
 
 class StatewideTestRepository
   include DataLoad

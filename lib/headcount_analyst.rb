@@ -130,7 +130,7 @@ class HeadcountAnalyst
     years_percentages = []
     all_student_data.each_pair do |year, subject_data|
       data = subject_data[subject]
-        if data == 0.0
+      if data == 0.0
         data = 0
       end
       years_percentages << [year, data]
@@ -165,7 +165,7 @@ class HeadcountAnalyst
         if settings[:subject].nil?
           all_subjects(swtest, settings)
         else
-        data = year_and_percentage(settings, swtest)
+          data = year_and_percentage(settings, swtest)
           @swtests_year_growth[name] = year_over_year_growth(data)
         end
       end

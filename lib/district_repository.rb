@@ -4,7 +4,6 @@ require_relative 'statewide_test_repository'
 require_relative 'economic_profile_repository'
 require_relative 'data_cleaner'
 require 'csv'
-require 'pry'
 class DistrictRepository
   include DataLoad
   include DataCleaner

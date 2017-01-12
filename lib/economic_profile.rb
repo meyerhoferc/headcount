@@ -1,5 +1,5 @@
-require 'pry'
 require_relative 'unknown_data_error'
+
 class EconomicProfile
   attr_reader :identifier
   def initialize(identifier)

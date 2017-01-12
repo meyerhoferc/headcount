@@ -8,12 +8,31 @@ require './lib/statewide_test'
 
 class HeadcountAnalystTest < Minitest::Test
   attr_reader :dr,
-              :ha
+              :ha,
+              :data
   def setup
     @dr = DistrictRepository.new
     dr.load_data({:enrollment => {:kindergarten => './test/fixtures/Kindergarten_sample_data.csv',
       :high_school_graduation => './test/fixtures/high_school_graduation_rates_sample.csv'}})
     @ha = HeadcountAnalyst.new(dr)
+    @data = {
+  :enrollment => {
+    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
+    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
+  },
+  :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  },
+  :economic_profile => {
+    :median_household_income => "./test/fixtures/Median_household_income.csv",
+    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
+    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
+    :title_i => "./test/fixtures/Title_I_students.csv"
+  }}
   end
 
   def test_it_is_a_headcount_analyst
@@ -116,24 +135,7 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_can_return_nested_array_of_year_and_data_for_statewide_test
     dr_3 = DistrictRepository.new
-    dr_3.load_data({
-  :enrollment => {
-    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
-    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
-  },
-  :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  },
-  :economic_profile => {
-    :median_household_income => "./test/fixtures/Median_household_income.csv",
-    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-    :title_i => "./test/fixtures/Title_I_students.csv"
-  }})
+    dr_3.load_data(data)
     statewide_test = dr_3.str.find_by_name('ACADEMY 20')
     data = ha.year_and_percentage({:subject => :math, :grade => 3}, statewide_test)
     assert_equal Array, data.class
@@ -143,24 +145,7 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_raises_errors_if_not_given_enough_or_correct_information
     dr_4 = DistrictRepository.new
-    dr_4.load_data({
-  :enrollment => {
-    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
-    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
-  },
-  :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  },
-  :economic_profile => {
-    :median_household_income => "./test/fixtures/Median_household_income.csv",
-    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-    :title_i => "./test/fixtures/Title_I_students.csv"
-  }})
+    dr_4.load_data(data)
     ha_3 = HeadcountAnalyst.new(dr_4)
     assert_raises(InsufficientInformationError) { ha_3.top_statewide_test_year_over_year_growth(subject: :math) }
     assert_raises(UnknownDataError) { ha_3.top_statewide_test_year_over_year_growth(grade: 9, subject: :math) }
@@ -172,24 +157,7 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_can_find_top_set_of_performers
     dr_4 = DistrictRepository.new
-    dr_4.load_data({
-  :enrollment => {
-    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
-    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
-  },
-  :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  },
-  :economic_profile => {
-    :median_household_income => "./test/fixtures/Median_household_income.csv",
-    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-    :title_i => "./test/fixtures/Title_I_students.csv"
-  }})
+    dr_4.load_data(data)
     ha_3 = HeadcountAnalyst.new(dr_4)
     actual = ha_3.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
     actual_2 = ha_3.top_statewide_test_year_over_year_growth(grade: 3)
@@ -206,24 +174,7 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_can_find_top_set_of_performers
     dr_4 = DistrictRepository.new
-    dr_4.load_data({
-  :enrollment => {
-    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
-    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
-  },
-  :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  },
-  :economic_profile => {
-    :median_household_income => "./test/fixtures/Median_household_income.csv",
-    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-    :title_i => "./test/fixtures/Title_I_students.csv"
-  }})
+    dr_4.load_data(data)
     ha_3 = HeadcountAnalyst.new(dr_4)
     actual = ha_3.top_statewide_test_year_over_year_growth(grade: 3)
     assert_equal String, actual[0].class
@@ -240,24 +191,7 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_returns_unknown_data_error_for_improper_weighting
     dr_4 = DistrictRepository.new
-    dr_4.load_data({
-  :enrollment => {
-    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
-    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
-  },
-  :statewide_testing => {
-    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
-    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
-    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
-    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
-  },
-  :economic_profile => {
-    :median_household_income => "./test/fixtures/Median_household_income.csv",
-    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
-    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
-    :title_i => "./test/fixtures/Title_I_students.csv"
-  }})
+    dr_4.load_data(data)
     ha_3 = HeadcountAnalyst.new(dr_4)
     actual_3 =
     assert_raises(UnknownDataError) { ha_3.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 1.0 }) }
