@@ -3,10 +3,9 @@ require_relative 'insufficient_information_error'
 
 class HeadcountAnalyst
   attr_reader :dr,
-							:clean_swtests
+							:swtests_year_growth
   def initialize(dr)
     @dr = dr
-		@clean_swtests = Hash.new
     @swtests_year_growth = Hash.new
   end
 
@@ -109,11 +108,16 @@ class HeadcountAnalyst
   end
 
   def year_over_year_growth(data)
-		undesired = ["N/A", "LNE", "#VALUE!"]
+		undesired = ["N/A", "LNE", "#VALUE!", nil, Float::NAN]
     clean_data = data.reject { |data| undesired.include?(data[1]) }
-    earliest = clean_data[0]
-    latest = clean_data[-1]
-    ((latest[1] - earliest[1]) / (latest[0] - earliest[0])).round(3)
+		clean_data = clean_data.reject { |data| data[1].class != Float }
+		if clean_data.empty?
+			0.0
+		else
+			earliest = clean_data[0]
+			latest = clean_data[-1]
+			((latest[1] - earliest[1]) / (latest[0] - earliest[0])).round(3)
+		end
   end
 
   def year_and_percentage(settings, swtest)
@@ -149,18 +153,20 @@ class HeadcountAnalyst
 		swtests = dr.str.swtests
     swtests.each_pair do |name, swtest|
       unless name == 'COLORADO'
-				return all_subjects(swtest, settings) if settings[:subject].nil?
-        data = year_and_percentage(settings, swtest)
-        @swtests_year_growth[name] = year_over_year_growth(data)
+				if settings[:subject].nil?
+					all_subjects(swtest, settings)
+				else
+					data = year_and_percentage(settings, swtest)
+					@swtests_year_growth[name] = year_over_year_growth(data)
+				end
 			end
     end
   end
 
 	def all_subjects(swtest, settings)
-		# this could be a setup method
-		weighting = [1, 1, 1] if settings[:weighting].nil?
+		weighting = { :math => 1, :reading => 1, :writing => 1} if settings[:weighting].nil?
 		if !settings[:weighting].nil?
-			raise(UnknownDataError) if settings[:weighting].keys.reduce(:+) != 1
+			raise(UnknownDataError) if settings[:weighting].values.reduce(:+) != 1
 			weighting = settings[:weighting]
 		end
 		subjects = [:math, :reading, :writing]
@@ -169,6 +175,21 @@ class HeadcountAnalyst
 			current_settings = {:grade => settings[:grade], :subject => subject}
 			data = year_and_percentage(current_settings, swtest)
 			percentages << year_over_year_growth(data)
+			weighted_percentage = weighted_percentages(percentages, weighting)
+			@swtests_year_growth[swtest.name] = weighted_percentage
 		end
+	end
+
+	def weighted_percentages(percentages, weighting)
+		weighted_percentages = percentages.map do |percent|
+			weight = weighting[:math] if percent == percentages[0]
+			weight = weighting[:reading] if percent == percentages[1]
+			weight = weighting[:writing] if percent == percentages[2]
+			if weight.nil? || percent.nil?
+				binding.pry
+			end
+			3 * weight * percent
+		end
+		weighted_percentages.reduce(:+)/weighted_percentages.count
 	end
 end

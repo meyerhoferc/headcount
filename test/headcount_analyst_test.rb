@@ -196,5 +196,46 @@ class HeadcountAnalystTest < Minitest::Test
     assert_equal 3, actual.count
     assert_equal String, actual[0][0].class
     assert_equal Float, actual[0][1].class
+    actual_3 = ha_3.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 0.0 })
+    assert_equal Array, actual_3.class
+    assert_equal Float, actual_3[1].class
+    assert_equal String, actual_3[0].class
+    assert_equal 4, ha_3.swtests_year_growth.count
+    assert_raises(UnknownDataError) {ha_3.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 1 })}
   end
+
+  def test_can_find_top_set_of_performers
+    dr_4 = DistrictRepository.new
+    dr_4.load_data({
+  :enrollment => {
+    :kindergarten => "./test/fixtures/Kindergarten_sample_data.csv",
+    :high_school_graduation => "./test/fixtures/high_school_graduation_rates_sample.csv",
+  },
+  :statewide_testing => {
+    :third_grade => "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :eighth_grade => "./test/fixtures/8th_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP.csv",
+    :math => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Math.csv",
+    :reading => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Reading.csv",
+    :writing => "./test/fixtures/Average_proficiency_on_the_CSAP_TCAP_by_race_ethnicity_Writing.csv"
+  },
+  :economic_profile => {
+    :median_household_income => "./test/fixtures/Median_household_income.csv",
+    :children_in_poverty => "./test/fixtures/School_aged_children_in_poverty.csv",
+    :free_or_reduced_price_lunch => "./test/fixtures/Students_qualifying_for_free_or_reduced_price_lunch.csv",
+    :title_i => "./test/fixtures/Title_I_students.csv"
+  }})
+    ha_3 = HeadcountAnalyst.new(dr_4)
+    actual = ha_3.top_statewide_test_year_over_year_growth(grade: 3)
+    assert_equal String, actual[0].class
+    assert_equal Float, actual[1].class
+    assert_equal 4, ha_3.swtests_year_growth.count
+  end
+
+  # def test_can_find_earliest_and_latest_for_corrupted_data
+  #   data = [[2008, "N/A"], [2009, 0.752], [2010, "LNE"], [2011, 0.993]]
+  #   undesired = ["N/A", "LNE", "#VALUE!"]
+  #   clean_data = data.reject { |data| undesired.include?(data[1]) }
+  #   binding.pry
+  #   puts clean_data
+  # end
 end
