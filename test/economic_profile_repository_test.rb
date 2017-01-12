@@ -57,7 +57,6 @@ class EconomicProfileRepositoryTest < Minitest::Test
   end
 
   def test_can_load_total_data
-    skip 
   	epr.load_data({ :economic_profile => {
     	:median_household_income => "./data/Median household income.csv",
     	:children_in_poverty => "./data/School-aged children in poverty.csv",
