@@ -21,14 +21,14 @@ class DataCleanerTest < Minitest::Test
 
 	def test_it_can_clean_percentages
 	  given =  ["0", "1", "0.12345", "N/A", "0.123", "LNE", "#VALUE!"]
-      result = [0, 1.000, 0.123, "N/A", 0.123,"LNE", "#VALUE!"]
-      matching = given.zip(result)
-      matching.each { |pair| assert_equal pair[1], clean_percent(pair[0]) }
+    result = [0, 1.000, 0.123, "N/A", 0.123,"LNE", "#VALUE!"]
+    matching = given.zip(result)
+    matching.each { |pair| assert_equal pair[1], clean_percent(pair[0]) }
 
 	end
 
 	def test_it_can_clean_salary
 	  salaries = ["55000", "56298", "89123"]
-      salaries.each { |salary| assert_equal Fixnum, clean_salary(salary).class }
+    salaries.each { |salary| assert_equal Fixnum, clean_salary(salary).class }
 	end
 end
