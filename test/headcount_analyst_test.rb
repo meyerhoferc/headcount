@@ -192,6 +192,7 @@ class HeadcountAnalystTest < Minitest::Test
   }})
     ha_3 = HeadcountAnalyst.new(dr_4)
     actual = ha_3.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
+    actual_2 = ha_3.top_statewide_test_year_over_year_growth(grade: 3)
     assert_equal 3, actual.count
     assert_equal String, actual[0][0].class
     assert_equal Float, actual[0][1].class
