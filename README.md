@@ -1,3 +1,3 @@
 ## Headcount
 
-Find the assignment here: https://github.com/turingschool/curriculum/blob/master/source/projects/headcount.markdown
+Headcount is an application that parses CSVs to create a relational database of information from Data.gov for public school data using only Ruby. There is a data access layer, an analysis layer, and a relationships layer to the system. The data access layer allows the system to be queried for specific data for a district or all districts in the state of Colorado. The analysis layer returns statistical analysis about the data, and the relationships layer answers questions relating to multiple data sets. The analysis layer returns statistical information such as: highest performing districts for statewide testing (for selected grades & subjects or all grades and subjects), an economic profile for a district, and answers the question 'does kindergarten participation rate correlate with high school graduation?'
